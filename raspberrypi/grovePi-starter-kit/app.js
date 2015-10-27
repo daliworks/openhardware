@@ -10,7 +10,9 @@
 var jsonrpc = require('jsonrpc-tcp'),
     _ = require('lodash'),
     os = require('os'),
-    log4js = require('log4js'),
+    log4js = require('log4js');
+
+var Lcd = require('./grovePiLcd'),
     grovePiSensors = require('./grovePiSensors');
 
 //log4js.configure(__dirname + '/logger_cfg.json', {
@@ -107,11 +109,18 @@ DEVICES = [{
       type: 'humidity',
       name: 'humidity',
       notification: false
+    },
+    { // actuator
+      id: [device0Id, 'lcd'].join('-'),
+      type: 'lcd',
+      name: 'lcd',
+      notification: false
     }
   ]
 }];
 
 var sensorNames = [];
+var grovePiLcd = new Lcd();
 
 // util function: find target sensor from DEVICES
 function getSensorInfo(cond) {
@@ -119,7 +128,10 @@ function getSensorInfo(cond) {
   _.each(DEVICES, function(device) {
     var sensor = _.find(device.sensors, cond);
     found = sensor;
-    return false;
+
+    if (found) {
+      return false;
+    }
   });
   return found || {};
 }
@@ -134,7 +146,11 @@ var Sensor = {
     logger.info('[set actuator] id=%s cmd=%s options=%j', id, cmd, options);
     var target = getSensorInfo({id: id});
 
-    grovePiSensors.doCommand(target.name, cmd, options);
+    if (target.name === 'lcd') {
+      grovePiLcd.doCommand(target.name, cmd, options);
+    } else {
+      grovePiSensors.doCommand(target.name, cmd, options);
+    }
     result(null, options || 'success');
   },
 
@@ -146,8 +162,14 @@ var Sensor = {
   },
 
   get: function (id, result) {
-    var target = getSensorInfo({id: id}),
-        sensorData = grovePiSensors.getData(target.name);
+    var target = getSensorInfo({id: id});
+    var sensorData;
+
+    if (target.name === 'lcd') {
+      sensorData = grovepiLcd.getData(target.name);
+    } else {
+      sensorData = grovePiSensors.getData(target.name);
+    }
     return result(null, {value: sensorData && sensorData.value, status: (sensorData && sensorData.status) || 'err'});
   }
 };
