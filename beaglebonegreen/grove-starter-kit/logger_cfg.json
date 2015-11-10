@@ -1,0 +1,16 @@
+{
+  "levels": {
+    "Main":         "INFO",
+    "Sensor":         "INFO"
+  },
+  "replaceConsole": true,
+  "appenders": [
+    {
+      "type": "file",
+      "filename": "grovepi.log" ,
+      "maxLogSize": 524288,
+      "backups": 10
+    }
+  ]
+}
+
