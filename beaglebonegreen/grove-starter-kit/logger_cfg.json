@@ -7,7 +7,7 @@
   "appenders": [
     {
       "type": "file",
-      "filename": "grovepi.log" ,
+      "filename": "grove_bbb.log" ,
       "maxLogSize": 524288,
       "backups": 10
     }
