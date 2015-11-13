@@ -9,8 +9,7 @@
   "dependencies": {
     "jsonrpc-tcp": "git+https://github.com/daliworks/node-jsonrpc-tcp.git",
     "lodash": "2.4.1",
-    "log4js": "^0.6.25",
-    "async": "1.5.0"
+    "log4js": "^0.6.25"
   },
   "main": "app",
   "keywords": [
