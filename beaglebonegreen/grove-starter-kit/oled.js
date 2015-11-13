@@ -11,7 +11,7 @@ var NR_ROW = 11,
 
 function Oled(pySourceDir) {
   if (_.isNull(pySourceDir) || _.isUndefined(pySourceDir)) {
-    pySourceDir = './GrovePi/Software/Python/;
+    pySourceDir = './GrovePi/Software/Python/';
   }
   this.pyArgv1 = pySourceDir + '/grove_oled.py';
 
