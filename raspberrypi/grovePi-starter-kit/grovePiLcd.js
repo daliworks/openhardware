@@ -17,7 +17,6 @@ function GrovePiLcd () {
   this.text = [{}, {}];
 
   this.lcd.on('ready', function () {
-    self._startPrinter();
     self.emit('ready');
   });
 
@@ -32,11 +31,23 @@ function GrovePiLcd () {
 util.inherits(GrovePiLcd, events.EventEmitter);
 
 GrovePiLcd.prototype.doCommand = function (name, command, options) {
+  var self = this;
+
   if (command === 'print') {
     var row = options.row || 0;
     var column = options.column || 0;
 
-    this.print(options.text, {row: row, column: column});
+    if (row >= LCD_NR_ROWS) {
+      row = 0;
+    }
+
+    if (column >= LCD_NR_COLS) {
+      column = 0;
+    }
+
+    process.nextTick(function () {
+      self.print(options.text, {row: row, column: column});
+    });
   } else if (command === 'clear') {
     this.clear(null, options.row);
   }
@@ -50,16 +61,8 @@ GrovePiLcd.prototype.print = function (str, position) {
   var row = position.row || 0,
       column = position.column || 0;
 
-  if (str.length <= LCD_NR_COLS - column) {
-    this.text[position.row].row = position.row;
-    this.text[position.row].column = position.column;
-    this.text[position.row].str = str;
-    this.text[position.row].scroll = false;
-  } else {
-    this.text[position.row].index = 0;
-    this.text[position.row].str = str + ' ';
-    this.text[position.row].scroll = true;
-  }
+  this.lcd.setCursor(column, row);
+  this.lcd.print(str);
 };
 
 GrovePiLcd.prototype.clear = function (cb, row) {
@@ -79,32 +82,6 @@ GrovePiLcd.prototype.clear = function (cb, row) {
       }
     });
   }
-};
-
-GrovePiLcd.prototype._startPrinter = function () {
-  var self = this;
-  async.eachSeries(this.text, function (text, done) {
-    if (text.str) {
-      if (text.scroll == true) {
-        self.lcd.setCursor(0, text.row);
-        self.lcd.print(text.str.substr(text.index++));
-        self.lcd.once('printed', function () {done()});
-        if (text.index === text.str.length) {
-          text.index = 0;
-        }
-      } else {
-        self.lcd.setCursor(text.column, text.row);
-        self.lcd.print(text.str);
-        self.lcd.once('printed', function () {done()});
-      }
-    } else {
-      done();
-    }
-  }, function (err) {
-    setTimeout(function () {
-      self._startPrinter(); 
-    }, 400);
-  });
 };
 
 module.exports = GrovePiLcd;
