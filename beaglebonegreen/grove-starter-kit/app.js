@@ -6,7 +6,8 @@ var jsonrpc = require('jsonrpc-tcp'),
 
 var Button = require('./button'),
     ChainableRGBLed = require('./chainableRGBLed'),
-    Accelerometer3Axis = require('./accelerometer3Axis');
+    Accelerometer3Axis = require('./accelerometer3Axis'),
+    Oled = require('./oled');
 
 var logger = log4js.getLogger('T+EMBEDDED');
 
@@ -29,6 +30,11 @@ function Device(id) {
     type: 'accelerometer',
     notification: true,
     constructor: Accelerometer3Axis
+  }, {
+    name: 'oled(12x12)',
+    type: 'lcd',
+    constructor: Oled,
+    actuating: _actuatingOled
   }];
 
   this.id = id;
@@ -44,32 +50,59 @@ function getSensorById(sensors, id) {
   return _.find(sensors, {'name': name} );
 }
 
-function _actuatingChainableRGBLed(sensor, cmd, options, cb) {
-  var r,g,b;
+function _actuatingOled(sensor, cmd, options, cb) {
+  function _callback(err, value) {
+    if (err) {
+      logger.error('oled actuating failed');
+      cb && cb(new Error('oled actuating failed'));
+    }
 
-  switch (cmd) {
-    case 'on':
-      r = options.red;
-      g = options.green;
-      b = options.blue;
-      break;
-    case 'off':
-      r = 0;
-      g = 0;
-      b = 0;
-      break;
-    default:
-      break;
+    cb && cb(null, options || 'success');
   }
 
-  sensor.driver.actuating(r, g, b, function (err, value) {
+  switch (cmd) {
+  case 'print':
+    sensor.driver.print(options.text, options.row, options.column, _callback);
+    break;
+  case 'clear':
+    sensor.driver.clear(options.row, _callback);
+    break;
+  default:
+    if (cb) {
+      process.nextTick(function () {
+        cb(new Error('unknown cmd(%s)', cmd));
+      });
+    }
+    break;
+  }
+}
+
+function _actuatingChainableRGBLed(sensor, cmd, options, cb) {
+  function callback(err, value) {
     if (err) {
-      cb && cb(err, null);
+      logger.error('chainableRGBLed actuating failed');
+      cb && cb(new Error('chainableRGBLed actuating failed'));
       return;
     }
 
-    cb && cb(cmd, value);
-  });
+    cb && cb(null, 'success');
+  }
+
+  switch (cmd) {
+  case 'on':
+    sensor.driver.turnOn(options.red, options.green, options.blue, callback);
+    break;
+  case 'off':
+    sensor.driver.turnOff(callback);
+    break;
+  default:
+    if (cb) {
+      process.nextTick(function () {
+        cb(new Error('unknown cmd(%s)', cmd));
+      });
+    }
+    break;
+  }
 }
 
 Device.prototype.sensing = function () {
@@ -80,7 +113,7 @@ Device.prototype.sensing = function () {
       var sensor = getSensorByID(self.sensors, id); //TODO change delete hardcodded
       if (_.isNull(sensor) || _.isUndefined(sensor)) {
         logger.error('getsensorbyid failed. id:' + id);
-        return result(null, 'err'); 
+        return result('err'); 
       }
 
       sensor.driver.getValue(function (err, vaule) {
@@ -94,12 +127,12 @@ Device.prototype.sensing = function () {
 
       if (_.isNull(sensor) || _.isUndefined(sensor)) {
         logger.error("getsensorbyid failed. id:" + id);
-        return result(null, 'err'); 
+        return result('err'); 
       }
 
       if (!sensor.notification) {
         logger.error('%s can`t setNotification', sensor.name);
-        return result(null, 'err');
+        return result('err');
       }
 
       if (_.find(self.pushStatus, {'name': sensor.name})) {
@@ -142,17 +175,10 @@ Device.prototype.sensing = function () {
 
       if (_.isNull(sensor) || _.isUndefined(sensor)) {
         logger.error('getsensorbyid failed. id:' + id);
-        result(null, 'err');
+        result('err');
       }
 
-      sensor.actuating(sensor, cmd, options, function (err, value) {
-        if (err) {
-          result(null, 'err');
-          return;
-        }
-
-        result(null, options || 'success');
-      });
+      sensor.actuating(sensor, cmd, options, result);
     }
   }
 };

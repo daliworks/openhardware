@@ -8,7 +8,7 @@ var logger = log4js.getLogger('RGBLED');
 
 function ChainableRGBLed(pySourceDir) {
   if (_.isNull(pySourceDir) || _.isUndefined(pySourceDir)) {
-    pySourceDir = '.';
+    pySourceDir = './3.Wooden_Lamp_BBG';
   }
 
   this.cmd = 'python ' + pySourceDir + '/grove_chainable_rgb_led.py';
@@ -21,7 +21,7 @@ ChainableRGBLed.prototype.statusSync = function () {
   return 'on';
 };
 
-ChainableRGBLed.prototype.actuating = function (r, g, b, cb) {
+ChainableRGBLed.prototype.turnOn = function (r, g, b, cb) {
   var cmdWithParameter = this.cmd + ' ' + r + ' ' + g + ' ' + b;
 
   exec(cmdWithParameter, function (err, stdout, stderr) {
@@ -42,6 +42,10 @@ ChainableRGBLed.prototype.actuating = function (r, g, b, cb) {
   }.bind(this));
 };
 
+ChainableRGBLed.prototype.turnOff = function (cb) {
+  this.turnOn(0, 0, 0, cb);
+};
+
 ChainableRGBLed.prototype.getValue = function (cb) {
   if (cb) {
     process.nextTick(function () {
@@ -60,7 +64,7 @@ if (require.main === module) {
       g = argv[1] || 255;
       b = argv[2] || 255;
 
-  chainableRGBLed.actuating(r, g, b);
+  chainableRGBLed.turnOn(r, g, b);
 }
 
 module.exports = ChainableRGBLed;
