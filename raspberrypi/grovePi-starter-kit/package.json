@@ -11,7 +11,7 @@
     "jsonrpc-tcp": "git+https://github.com/daliworks/node-jsonrpc-tcp.git",
     "lodash": "2.4.1",
     "log4js": "^0.6.25",
-    "i2c": "0.1.4",
+    "i2c": "0.1.8",
     "async": "1.5.0"
   },
   "main": "app",
