@@ -151,7 +151,12 @@ var Sensor = {
     } else {
       grovePiSensors.doCommand(target.name, cmd, options);
     }
-    result(null, options || 'success');
+
+    if (target.name === 'relay') {
+      result(null, 'ok');
+    } else {
+      result(null, options || 'success');
+    }
   },
 
   setNotification: function (id, result) { 
