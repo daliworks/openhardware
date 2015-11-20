@@ -279,7 +279,7 @@ GrovePiSensors.prototype.doCommand = function (name, cmd, options) {
       clearTimeout(self.sensors[name].blinkTimer);
     }
 
-    self.sensors[name].blinkTtimer = setInterval(function () {
+    self.sensors[name].blinkTimer = setInterval(function () {
       self.sensors[name].instance.write(!self.sensors[name].instance.read()[0]);
     }, options.interval || 1000);
 
