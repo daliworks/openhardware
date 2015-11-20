@@ -274,6 +274,24 @@ GrovePiSensors.prototype.doCommand = function (name, cmd, options) {
         self.sensors[name].instance.write(0); // off
       }, options.duration);
     }
+  } else if (cmd === 'blink') {
+    if (self.sensors[name].blinkTimer) {
+      clearTimeout(self.sensors[name].blinkTimer);
+    }
+
+    self.sensors[name].blinkTtimer = setInterval(function () {
+      self.sensors[name].instance.write(!self.sensors[name].instance.read()[0]);
+    }, options.interval || 1000);
+
+    if (options.duration) {
+      self.sensors[name].offTimer = setTimeout(function() {
+        clearTimeout(self.sensors[name].blinkTimer);
+        self.blinkTimer = null;
+        self.offTimer = null;
+        self.sensors[name].instance.write(0);
+      }, options.duration || 10000);
+    }
+    return;
   } else { // 'off'
     command = 0;
   }
