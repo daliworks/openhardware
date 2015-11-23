@@ -155,7 +155,7 @@ var Sensor = {
     if (target.name === 'relay') {
       result(null, 'ok');
     } else {
-      result(null, options || 'success');
+      result(null, 'success');
     }
   },
 

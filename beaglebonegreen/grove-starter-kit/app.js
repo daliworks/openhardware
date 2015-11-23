@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var jsonrpc = require('jsonrpc-tcp'),
     log4js = require('log4js'),
@@ -110,7 +110,7 @@ Device.prototype.sensing = function () {
 
   return {
     get: function (id, result) {
-      var sensor = getSensorByID(self.sensors, id); //TODO change delete hardcodded
+      var sensor = getSensorById(self.sensors, id); //TODO change delete hardcodded
       if (_.isNull(sensor) || _.isUndefined(sensor)) {
         logger.error('getsensorbyid failed. id:' + id);
         return result('err'); 
@@ -180,7 +180,7 @@ Device.prototype.sensing = function () {
 
       sensor.actuating(sensor, cmd, options, result);
     }
-  }
+  };
 };
 
 Device.prototype.discovering = function (result) {
@@ -188,11 +188,11 @@ Device.prototype.discovering = function (result) {
   var self = this;
 
   devices[this.id] = {deviceAddess: this.id};
-  devices[this.id]["sensors"] = [];
+  devices[this.id]['sensors'] = [];
 
   _.forEach(this.sensors, function (sensor) {
     sensor.id = [self.id, sensor.name].join('-'); //FIXME make function 
-    devices[self.id]["sensors"].push(
+    devices[self.id]['sensors'].push(
       { 
         id:sensor.id, 
         type:sensor.type,
@@ -209,7 +209,7 @@ Device.prototype._init = function () {
   _.forEach(this.sensors, function (sensor) {
     sensor.driver = new sensor.constructor();
   });
-}
+};
 
 Device.prototype._serverInit = function () {
   var self = this;
@@ -240,6 +240,6 @@ Device.prototype._serverInit = function () {
   server.listen(JSONRPC_PORT, function () {
     logger.info('listening port=%d', JSONRPC_PORT);
   });
-}
+};
 
 var device = new Device('0');
