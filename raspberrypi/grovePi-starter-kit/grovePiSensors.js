@@ -244,6 +244,8 @@ GrovePiSensors.prototype.getData = function (name) {
     value = self.sensors[name].instance.read()[0];
   } else if (name === 'humidity') {
     value = self.sensors[name].instance.read()[1];
+  } else if (name === 'sound') {
+      value = self.sensors[name].instance.read() * 200 / 1024;
   } else {
     value = self.sensors[name].instance.read();
   }
