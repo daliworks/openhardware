@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var _ = require('lodash'),
     I2c = require('i2c'),
@@ -78,32 +78,32 @@ Lcd.prototype.setBg = function (r, g, b) {
   async.series([
     function (done) {
       self.bl_i2c.writeBytes(0x0, [0], function (err) {
-        setTimeout(function () { done() }, 5);
+        setTimeout(function () { done(); }, 5);
       });
     },
     function (done) {
       self.bl_i2c.writeBytes(0x1, [0], function (err) {
-        setTimeout(function () { done() }, 5);
+        setTimeout(function () { done(); }, 5);
       });
     },
     function (done) {
       self.bl_i2c.writeBytes(0x8, [0xaa], function (err) {
-        setTimeout(function () { done() }, 5);
+        setTimeout(function () { done(); }, 5);
       });
     },
     function (done) {
       self.bl_i2c.writeBytes(0x4, [r], function (err) {
-        setTimeout(function () { done() }, 5);
+        setTimeout(function () { done(); }, 5);
       });
     },
     function (done) {
       self.bl_i2c.writeBytes(0x3, [g], function (err) {
-        setTimeout(function () { done() }, 5);
+        setTimeout(function () { done(); }, 5);
       });
     },
     function (done) {
       self.bl_i2c.writeBytes(0x2, [b], function (err) {
-        setTimeout(function () { done() }, 5);
+        setTimeout(function () { done(); }, 5);
       });
     }],
     function (err, result) {});

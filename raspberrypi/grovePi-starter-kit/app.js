@@ -171,7 +171,7 @@ var Sensor = {
     var sensorData;
 
     if (target.name === 'lcd') {
-      sensorData = grovepiLcd.getData(target.name);
+      sensorData = grovePiLcd.getData(target.name);
     } else {
       sensorData = grovePiSensors.getData(target.name);
     }

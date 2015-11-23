@@ -118,8 +118,8 @@ GrovePiSensors.prototype.init = function (sensorNames) {
         self.sensors.relay.instance = new OnOffDigitalSensor(4);
         self.sensors.button.instance = new ButtonDigitalSensor(5);
         self.sensors.ultrasonic.instance = new UltrasonicDigitalSensor(6);
-        self.sensors.temperature.instance = self.sensors.humidity.instance
-          = new DHTDigitalSensor(7, DHTDigitalSensor.VERSION.DHT11, DHTDigitalSensor.CELSIUS);
+        self.sensors.temperature.instance = self.sensors.humidity.instance =
+          new DHTDigitalSensor(7, DHTDigitalSensor.VERSION.DHT11, DHTDigitalSensor.CELSIUS);
 
         console.log('Ultrasonic Digital Sensor (start watch)');
         /*
@@ -245,7 +245,9 @@ GrovePiSensors.prototype.getData = function (name) {
   } else if (name === 'humidity') {
     value = self.sensors[name].instance.read()[1];
   } else if (name === 'sound') {
-      value = self.sensors[name].instance.read() * 200 / 1024;
+    value = self.sensors[name].instance.read() * 200 / 1024;
+  } else if (name === 'light') {
+    value = 10000 / (Math.pow(self.sensors[name].instance.read() * 10, 4 / 3));
   } else {
     value = self.sensors[name].instance.read();
   }
