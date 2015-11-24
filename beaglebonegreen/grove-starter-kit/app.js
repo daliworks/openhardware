@@ -57,7 +57,7 @@ function _actuatingOled(sensor, cmd, options, cb) {
       cb && cb(new Error('oled actuating failed'));
     }
 
-    cb && cb(null, options || 'success');
+    cb && cb(null, 'success');
   }
 
   switch (cmd) {
