@@ -1,0 +1,30 @@
+{
+  "name": "grove-starter-kit-bbg-jsonrpc-server",
+  "description": "grove starter kit bbg example server for sensorjs-jsonrpc",
+  "version": "0.0.1-1",
+  "author": {
+    "name": "daliworks",
+    "email": "dev@daliworks.net"
+  },
+  "dependencies": {
+    "jsonrpc-tcp": "git+https://github.com/daliworks/node-jsonrpc-tcp.git",
+    "lodash": "2.4.1",
+    "log4js": "^0.6.25"
+  },
+  "main": "app",
+  "keywords": [
+    "sensor",
+    "sensor.js",
+    "jsonrpc",
+    "driver"
+  ],
+  "engines": {
+    "node": ">=0.8.x"
+  },
+  "licenses": [
+    {
+      "type": "Copyright (c) 2015, Daliworks. All rights reserved."
+    }
+  ]
+}
+
