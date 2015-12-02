@@ -1,6 +1,7 @@
 'use strict'
 
-var fs = require('fs');
+var fs = require('fs'),
+    exec = require('child_process').exec;
 
 function SoilMoisture(pin) {
   if (!pin) {
@@ -8,6 +9,10 @@ function SoilMoisture(pin) {
   }
 
   this.soilMoistureValueFile = '/sys/devices/ocp.3/helper.12/' + pin;
+  if (!fs.existsSync(this.soilMoistureValueFile)) {
+    exec('echo cape-bone-iio > /sys/devices/bone_capemgr.9/slots', function (err, stdout, stderr) {
+    });
+  }
 }
 
 SoilMoisture.prototype.statusSync = function () {
@@ -21,7 +26,6 @@ SoilMoisture.prototype.getValue = function (cb) {
       return;
     }
 
-    console.log(data);
     cb(null, data);
   });
 }
