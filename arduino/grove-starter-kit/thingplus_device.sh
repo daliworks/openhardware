@@ -42,9 +42,11 @@ start() {
   if check_running ; then
     echo "already running"
   else
+    echo "starting... wait 5 sec"
     cd $APP_DIR
     $NODE $BASE_DIR/app.js 2>&1 >> $LOG_DIR/thingplus_device.log &
     echo $! > $PID_FILE;
+    sleep 5
   fi
 }
 
@@ -65,7 +67,6 @@ case "$1" in
 
   start)
     start
-    sleep 5
     ;;
 
   stop)
