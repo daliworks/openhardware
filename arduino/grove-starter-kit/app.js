@@ -238,7 +238,7 @@ Device.prototype.sensing = function () {
 
     setNotification: function (id, result) {
       var sensor = getSensorById(self.sensors, id);
-      logger.info('setNotification');
+      logger.info('%s setNotification', sensor.name);
 
       if (_.isNull(sensor) || _.isUndefined(sensor)) {
         logger.error("getsensorbyid failed. id:" + id);
@@ -261,6 +261,8 @@ Device.prototype.sensing = function () {
         if (_.isNull(self.client)) {
           return;
         }
+
+        logger.info("%s sensor`s event value:%d", sensor.name, value);
 
         self.client.send({method: 'sensor.notification',
           params: [id, {value: value}] });
@@ -287,6 +289,8 @@ Device.prototype.sensing = function () {
 
     set: function(id, cmd, options, result) {
       var sensor = getSensorById(self.sensors, id);
+
+      logger.info('%s set cmd:%s', sensor.name, cmd);
 
       if (_.isNull(sensor) || _.isUndefined(sensor)) {
         logger.error('getsensorbyid failed. id:' + id);
