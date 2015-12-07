@@ -8,7 +8,7 @@ var logger = log4js.getLogger('BUTTON');
 
 function Button(pySourceDir) {
   if (_.isNull(pySourceDir) || _.isUndefined(pySourceDir)) {
-    pySourceDir = './3.Wooden_Lamp_BBG';
+    pySourceDir = process.env.PWD + '/3.Wooden_Lamp_BBG';
   }
 
   this.cmd = 'python ' + pySourceDir + '/grove_i2c_adc.py';

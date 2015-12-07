@@ -9,7 +9,7 @@ var CHANGED_THRESHOLD = 0.08;
 
 function Accelerometer3Axis(pySourceDir) {
   if (_.isNull(pySourceDir) || _.isUndefined(pySourceDir)) {
-    pySourceDir = './3.Wooden_Lamp_BBG';
+    pySourceDir = process.env.PWD + '/3.Wooden_Lamp_BBG';
   }
 
   this.cmd = 'python ' + pySourceDir + '/adxl345.py';
