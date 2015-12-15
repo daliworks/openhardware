@@ -9,7 +9,13 @@ if [ -z $BASE_DIR ]; then
   BASE_DIR=$(dirname $PATH_ABS)
 fi
 
-NODE=$BASE_DIR/../node/bin/node
+if [[ $(uname) = CYGWIN* ]]; then
+  NODE=node.exe
+  BASE_DIR=C:\\cygwin/$BASE_DIR
+else
+  NODE=$BASE_DIR/../node/bin/node
+fi
+
 LOG_DIR="$BASE_DIR/log"
 
 PID_FILE="$BASE_DIR/.driver.pid"
