@@ -58,7 +58,12 @@ start() {
 
 stop() {
   sync
-  pkill -F $PID_FILE 2> /dev/null;
+  if [[ $(uname) == CYGWIN* ]]; then
+    taskkill /F /PID `cat $PID_FILE`
+  else
+    pkill -F $PID_FILE 2> /dev/null;
+  fi
+
   rm -f $PID_FILE;
 }
 
