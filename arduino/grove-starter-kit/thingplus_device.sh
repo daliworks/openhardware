@@ -11,7 +11,11 @@ fi
 
 if [[ $(uname) = CYGWIN* ]]; then
   NODE=node.exe
-  BASE_DIR=C:\\cygwin/$BASE_DIR
+  if [ -d "C:\\cygwin" ]; then
+    BASE_DIR=C:\\cygwin/$BASE_DIR
+  else
+    BASE_DIR=C:\\cygwin64/$BASE_DIR
+  fi
 else
   NODE=$BASE_DIR/../node/bin/node
 fi
