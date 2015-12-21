@@ -114,7 +114,7 @@ Lcd.prototype._printChar = function (str, index, cb) {
 
     if (index >= str.length || this.clearing) {
       if (cb) {
-        return cb(null, str);
+        cb(null, str);
       }
 
       return self.emit('printed', str);
@@ -126,7 +126,7 @@ Lcd.prototype._printChar = function (str, index, cb) {
       } );
     } catch(e) {
       if (cb) {
-        return cb(e);
+        cb(e);
       }
 
       return self.emit('error', e);
