@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var five = require('johnny-five');
 
@@ -14,7 +14,7 @@ Light.prototype.getValue = function (cb) {
       cb(null, self.light.value);
     });
   }
-}
+};
 
 Light.prototype.statusSync = function () {
   return 'on';
@@ -22,7 +22,7 @@ Light.prototype.statusSync = function () {
 
 Light.prototype.trigger = function (cb) {
   this.light.on('change', function (err, data) {
-    cb && cb(null, data);
+    return cb && cb(null, data);
   });
 };
 

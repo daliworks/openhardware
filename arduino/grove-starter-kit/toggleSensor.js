@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var five = require('johnny-five');
 

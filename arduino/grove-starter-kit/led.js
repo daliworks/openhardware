@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var five = require('johnny-five');
 
@@ -7,21 +7,21 @@ function Led(pin) {
   this.turnOffTimer = null;
 }
 
-Led.prototype.turnOn = function (duration_ms, cb) {
+Led.prototype.turnOn = function (durationMs, cb) {
   var self = this;
 
   if (this.turnOffTimer) {
-    clearInterval(this.turnOffTimer)
+    clearInterval(this.turnOffTimer);
   }
 
   this.led.stop();
   this.led.on();
 
-  if (duration_ms) {
+  if (durationMs) {
     this.turnOffTimer = setTimeout(function () {
       self.led.stop();
       self.led.off();
-    }, duration_ms);
+    }, durationMs);
   }
 
   if (cb) {
@@ -31,24 +31,24 @@ Led.prototype.turnOn = function (duration_ms, cb) {
   }
 };
 
-Led.prototype.blink = function (duration_ms, interval_ms, cb) {
+Led.prototype.blink = function (durationMs, intervalMs, cb) {
   var self = this;
 
   if (this.turnOffTimer) {
-    clearInterval(this.turnOffTimer)
+    clearInterval(this.turnOffTimer);
   }
 
-  if (!interval_ms) {
-    interval_ms = 100;
+  if (!intervalMs) {
+    intervalMs = 100;
   }
 
-  this.led.blink(interval_ms);
+  this.led.blink(intervalMs);
 
-  if (duration_ms) {
+  if (durationMs) {
     this.turnOffTimer = setTimeout(function () {
       self.led.stop();
       self.led.off();
-    }, duration_ms);
+    }, durationMs);
   }
 
   if (cb) {

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var five = require('johnny-five');
 
@@ -14,7 +14,7 @@ ToggleActuator.prototype.turnOn = function (cb) {
       cb(null);
     });
   }
-}
+};
 
 ToggleActuator.prototype.turnOff = function (cb) {
   this.toggleActuator.low();
@@ -24,6 +24,6 @@ ToggleActuator.prototype.turnOff = function (cb) {
       cb(null);
     });
   }
-}
+};
 
 module.exports = ToggleActuator;

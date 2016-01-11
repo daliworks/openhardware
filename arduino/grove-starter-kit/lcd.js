@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var five = require('johnny-five'),
     _ = require('lodash');
@@ -7,7 +7,7 @@ var NR_COLUMN = 16,
     NR_ROW = 2;
 
 function Lcd() {
-  this.lcd = new five.LCD({controller: "JHD1313M1"});
+  this.lcd = new five.LCD({controller: 'JHD1313M1'});
 }
 
 Lcd.prototype.print = function (text, row, column, cb) {
@@ -46,7 +46,7 @@ Lcd.prototype.clear = function (row, cb) {
       cb(null);
     });
   }
-}
+};
 
 module.exports = Lcd;
 

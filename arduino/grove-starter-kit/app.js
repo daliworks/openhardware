@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var jsonrpc = require('jsonrpc-tcp'),
     log4js = require('log4js'),
@@ -18,6 +18,122 @@ var logger = log4js.getLogger('T+EMBEDDED');
 
 var JSONRPC_PORT = 50800;
 var STATUS_INTERVAL = 60000;  // status report interval; less than gateway one.
+
+function _lcdActuating(sensor, cmd, options, cb) {
+  function _callback(err, value) {
+    if (err) {
+      logger.error('lcd actuating failed');
+      return cb && cb(new Error('lcd actuating failed'));
+    }
+
+    return cb && cb(null, 'success');
+  }
+
+  switch (cmd) {
+  case 'print':
+    sensor.driver.print(options.text, options.row, options.column, _callback);
+    break;
+  case 'clear':
+    sensor.driver.clear(options.row, _callback);
+    break;
+  default:
+    if (cb) {
+      process.nextTick(function () {
+        cb(new Error('unknown cmd(%s)', cmd));
+      });
+    }
+    break;
+  }
+}
+
+function _buzzerActuating(sensor, cmd, options, cb) {
+  function callback(err, value) {
+    if (err) {
+      logger.error('buzzer actuating failed');
+      return cb && cb(new Error('buzzer actuating failed'));
+    }
+
+    return cb && cb(null, 'success');
+  }
+
+  switch (cmd) {
+  case 'on':
+    sensor.driver.turnOn(callback);
+    break;
+  case 'off':
+    sensor.driver.turnOff(callback);
+    break;
+  default:
+    if (cb) {
+      process.nextTick(function () {
+        cb(new Error('unknown cmd(%s)', cmd));
+      });
+    }
+    break;
+  }
+}
+
+
+function _ledActuating(sensor, cmd, options, cb) {
+  function callback(err, value) {
+    if (err) {
+      logger.error('led actuating failed');
+      return cb && cb(new Error('led actuating failed'));
+    }
+
+    return cb && cb(null, 'success');
+  }
+
+  switch (cmd) {
+  case 'on':
+    sensor.driver.turnOn(options.duration, callback);
+    break;
+  case 'off':
+    sensor.driver.turnOff(callback);
+    break;
+  case 'blink':
+    sensor.driver.blink(options.duration, options.interval, callback);
+    break;
+  default:
+    if (cb) {
+      process.nextTick(function () {
+        cb(new Error('unknown cmd(%s)', cmd));
+      });
+    }
+    break;
+  }
+}
+
+function _relayActuating(sensor, cmd, options, cb) {
+  function callback(err, value) {
+    if (err) {
+      logger.error('relay actuating failed');
+      return cb && cb(new Error('relay actuating failed'));
+    }
+
+    return cb && cb(null, options || 'ok');
+  }
+
+  switch (cmd) {
+  case 'on':
+    sensor.driver.turnOn(options.duration, callback);
+    break;
+  case 'off':
+    sensor.driver.turnOff(callback);
+    break;
+  default:
+    if (cb) {
+      process.nextTick(function () {
+        cb(new Error('unknown cmd(%s)', cmd));
+      });
+    }
+    break;
+  }
+}
+
+function _analogConstructor(sensor) {
+  return new Analog(sensor.pin, sensor.min, sensor.max);
+}
 
 function Device(id) {
   this.sensors = [{
@@ -96,124 +212,6 @@ function Device(id) {
   this._init();
 }
 
-function _lcdActuating(sensor, cmd, options, cb) {
-  function _callback(err, value) {
-    if (err) {
-      logger.error('lcd actuating failed');
-      cb && cb(new Error('lcd actuating failed'));
-    }
-
-    cb && cb(null, 'success');
-  }
-
-  switch (cmd) {
-  case 'print':
-    sensor.driver.print(options.text, options.row, options.column, _callback);
-    break;
-  case 'clear':
-    sensor.driver.clear(options.row, _callback);
-    break;
-  default:
-    if (cb) {
-      process.nextTick(function () {
-        cb(new Error('unknown cmd(%s)', cmd));
-      });
-    }
-    break;
-  }
-}
-
-function _buzzerActuating(sensor, cmd, options, cb) {
-  function callback(err, value) {
-    if (err) {
-      logger.error('buzzer actuating failed');
-      cb && cb(new Error('buzzer actuating failed'));
-      return;
-    }
-
-    cb && cb(null, 'success');
-  }
-
-  switch (cmd) {
-  case 'on':
-    sensor.driver.turnOn(callback);
-    break;
-  case 'off':
-    sensor.driver.turnOff(callback);
-    break;
-  default:
-    if (cb) {
-      process.nextTick(function () {
-        cb(new Error('unknown cmd(%s)', cmd));
-      });
-    }
-    break;
-  }
-}
-
-function _ledActuating(sensor, cmd, options, cb) {
-  function callback(err, value) {
-    if (err) {
-      logger.error('led actuating failed');
-      cb && cb(new Error('led actuating failed'));
-      return;
-    }
-
-    cb && cb(null, 'success');
-  }
-
-  switch (cmd) {
-  case 'on':
-    sensor.driver.turnOn(options.duration, callback);
-    break;
-  case 'off':
-    sensor.driver.turnOff(callback);
-    break;
-  case 'blink':
-    sensor.driver.blink(options.duration, options.interval, callback);
-    break;
-  default:
-    if (cb) {
-      process.nextTick(function () {
-        cb(new Error('unknown cmd(%s)', cmd));
-      });
-    }
-    break;
-  }
-}
-
-function _relayActuating(sensor, cmd, options, cb) {
-  function callback(err, value) {
-    if (err) {
-      logger.error('relay actuating failed');
-      cb && cb(new Error('relay actuating failed'));
-      return;
-    }
-
-    cb && cb(null, options || 'ok');
-  }
-
-  switch (cmd) {
-  case 'on':
-    sensor.driver.turnOn(options.duration, callback);
-    break;
-  case 'off':
-    sensor.driver.turnOff(callback);
-    break;
-  default:
-    if (cb) {
-      process.nextTick(function () {
-        cb(new Error('unknown cmd(%s)', cmd));
-      });
-    }
-    break;
-  }
-}
-
-function _analogConstructor(sensor) {
-  return new Analog(sensor.pin, sensor.min, sensor.max);
-}
-
 function getSensorById(sensors, id) {
   var name = id.substring(id.indexOf('-')+1);
   return _.find(sensors, {'name': name} );
@@ -241,7 +239,7 @@ Device.prototype.sensing = function () {
       logger.info('%s setNotification', sensor.name);
 
       if (_.isNull(sensor) || _.isUndefined(sensor)) {
-        logger.error("getsensorbyid failed. id:" + id);
+        logger.error('getsensorbyid failed. id:' + id);
         return result('err'); 
       }
 
@@ -262,7 +260,7 @@ Device.prototype.sensing = function () {
           return;
         }
 
-        logger.info("%s sensor`s event value:%d", sensor.name, value);
+        logger.info('%s sensor`s event value:%d', sensor.name, value);
 
         self.client.send({method: 'sensor.notification',
           params: [id, {value: value}] });
@@ -359,7 +357,7 @@ Device.prototype._serverInit = function () {
     self.pushStatus.splice(0, self.pushStatus.length);
 
     _.forEach(self.sensors, function (sensor) {
-      sensor.driver.cleanup && sensor.driver.cleanup();
+      return sensor.driver.cleanup && sensor.driver.cleanup();
     });
 
     logger.info('client disconnected');

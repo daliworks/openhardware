@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var five = require('johnny-five');
 
@@ -22,7 +22,7 @@ Temperature.prototype.statusSync = function () {
 
 Temperature.prototype.trigger = function (cb) {
   this.temperature.on('change', function (err, data) {
-    cb && cb(null, data.celsius.toFixed(2));
+    return cb && cb(null, data.celsius.toFixed(2));
   });
 };
 

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var five = require('johnny-five');
 
@@ -15,7 +15,7 @@ Analog.prototype.getValue = function (cb) {
       cb(null, self.analog.scaled);
     });
   }
-}
+};
 
 Analog.prototype.statusSync = function () {
   return 'on';
@@ -23,7 +23,7 @@ Analog.prototype.statusSync = function () {
 
 Analog.prototype.trigger = function (cb) {
   this.analog.on('change', function (err, data) {
-    cb && cb(null, data);
+    return cb && cb(null, data);
   });
 };
 

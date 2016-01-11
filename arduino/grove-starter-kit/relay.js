@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var five = require('johnny-five');
 
@@ -7,19 +7,19 @@ function Relay(pin) {
   this.turnOffTimer = null;
 }
 
-Relay.prototype.turnOn = function (duration_ms, cb) {
+Relay.prototype.turnOn = function (durationMs, cb) {
   var self = this;
 
   if (this.turnOffTimer) {
-    clearInterval(this.turnOffTimer)
+    clearInterval(this.turnOffTimer);
   }
 
   this.relay.on();
 
-  if (duration_ms) {
+  if (durationMs) {
     this.turnOffTimer = setTimeout(function () {
       self.relay.off();
-    }, duration_ms);
+    }, durationMs);
   }
 
   if (cb) {
@@ -31,7 +31,7 @@ Relay.prototype.turnOn = function (duration_ms, cb) {
 
 Relay.prototype.turnOff = function (cb) {
   if (this.turnOffTimer) {
-    clearInterval(this.turnOffTimer)
+    clearInterval(this.turnOffTimer);
   }
 
   this.relay.off();
