@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 path_abs() {
   [[ $1 = /* ]] && eval "$2='$1'" || eval "$2='$PWD/${1#./}'"
@@ -16,8 +16,10 @@ if [[ $(uname) = CYGWIN* ]]; then
   else
     BASE_DIR=C:\\cygwin64/$BASE_DIR
   fi
-else
+elif [[ $(uname) = Darwin* ]]; then
   NODE=$BASE_DIR/../node/bin/node
+else
+  NODE=/usr/local/bin/node
 fi
 
 LOG_DIR="$BASE_DIR/log"
