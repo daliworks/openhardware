@@ -148,7 +148,7 @@ function Device(id) {
     type: 'onoff',
     notification: true,
     constructor: ToggleSensor,
-    pin: 5
+    pin: '5'
   }, {
     name: 'touch',
     type: 'onoff',
