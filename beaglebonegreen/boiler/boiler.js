@@ -13,7 +13,7 @@ function Boiler(gpio) {
   }
   catch (err) {
     fs.writeFileSync('/sys/class/gpio/export', gpio.toString());
-    fs.writeFileSync(this.gpioDriver + 'dirction', 'out');
+    fs.writeFileSync(this.gpioDriver + 'direction', 'out');
     fs.writeFileSync(this.gpioDriver + 'value', '1');
   }
 }
@@ -59,7 +59,6 @@ Boiler.prototype.turnOff = function (cb) {
 
 module.exports = Boiler;
 
-/*
 if (require.main === module) {
   var b = new Boiler(20);
   b.turnOn(function (err) { 
@@ -68,4 +67,3 @@ if (require.main === module) {
     })
   });
 }
-*/
