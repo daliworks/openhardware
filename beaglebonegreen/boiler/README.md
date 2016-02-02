@@ -11,7 +11,7 @@
 * 전선
 
 #### 하드웨어 연결
-![connection](https://raw.github.com/daliworks/openhardware/beaglebonegreen/boiler/doc/image/connection.png "connection")
+![connection](https://raw.githubusercontent.com/daliworks/openhardware/master/beaglebonegreen/boiler/doc/connection.jpg "connection")
 
 1. 왁스형 구동기와 릴레이 연결
    * 왁스형 구동기에는 2개의 선이 있으며 하나는 전원 커넥터로 연결되어 있으며, 다른 하나는 방안의 온도 조절기와 연결되어 있습니다. 이 중 온도조절기와 연결되어 있는 선을 릴레이와 연결합니다.
@@ -24,7 +24,7 @@ REALY | BBB
 VCC|VCC(P9 PIN7)
 GND|GND(P9 PIN1)
 IN2|GPIO20(P9 PIN41)
-##### 주의 : 릴레이-왁스형 구동기-온도 조절기 사이에는 220V가 흐릅니다. 감전에 주의하세요.
+##### 주의 : 릴레이, 왁스형 구동기, 온도 조절기 사이에는 220V가 흐릅니다. 감전에 주의하세요.
 
 
 #### 소프트웨어
