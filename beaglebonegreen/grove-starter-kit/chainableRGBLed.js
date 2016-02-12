@@ -31,7 +31,7 @@ ChainableRGBLed.prototype.turnOn = function (r, g, b, cb) {
       return;
     }
 
-    logger.info('atuating success');
+    logger.info('actuating success');
     logger.info('r:%d g:%d b:%d', r, g, b);
 
     this.r = r;
