@@ -38,7 +38,7 @@ Camera.prototype.snapPicture = function (cb) {
 
         exec('rm -f ' + filenameLocaldir);
 
-        return done(null, url);
+        return done(null, url[0]);
       });
     }],
     function (err, url) {
