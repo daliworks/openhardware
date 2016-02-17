@@ -13,29 +13,31 @@ Camera.prototype.statusSync = function () {
 
 Camera.prototype.snapPicture = function (cb) {
   var self = this;
-  var url = 'test';
+  var url;
   var filename = new Date().toISOString() + '.jpg';
+  var filenameLocaldir = __dirname + '/' + filename;
 
   async.waterfall([
     function (done) {
       self.mutex.lock(function () {
         return done();
         });
-    },
-    function (done) {
-      exec('raspistill -vf -hf -o ' + filename, function (err, stdout, stderr) {
+    }, function (done) {
+      exec('raspistill -vf -hf -o ' + filenameLocaldir, function (err, stdout, stderr) {
         return done();
       });
-    },
-    function (done) {
-      exec('dropbox_uploader.sh upload ' + filename + ' /', function (err, stdout, stderr) {
+    }, function (done) {
+      exec('dropbox_uploader.sh upload ' + filenameLocaldir + ' /', function (err, stdout, stderr) {
         return done();
       });
-    },
+    }, 
     function (done) {
       exec('dropbox_uploader.sh share ' + filename, function (err, stdout, stderr) {
         var urlPattern = new RegExp('https:\\/\\/.*', 'g');
         url = stdout.match(urlPattern);
+
+        exec('rm -f ' + filenameLocaldir);
+
         return done(null, url);
       });
     }],

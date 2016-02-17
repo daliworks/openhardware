@@ -33,17 +33,17 @@ function getSensorById(sensors, id) {
 }
 
 function _actuatingCamera(sensor, cmd, options, cb) {
-  function _callback(err, value) {
+  function _callback(err, url) {
     if (err) {
-      logger.error('oled actuating failed');
-      cb && cb(new Error('oled actuating failed'));
+      logger.error('camera actuating failed');
+      cb && cb(new Error('camera actuating failed'));
     }
 
-    cb && cb(null, 'success');
+    cb && cb(null, url);
   }
 
   switch (cmd) {
-  case 'print':
+  case 'snapPicture':
     sensor.driver.snapPicture(_callback);
     break;
   default:
