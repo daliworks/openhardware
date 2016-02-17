@@ -39,7 +39,12 @@ function _actuatingCamera(sensor, cmd, options, cb) {
       cb && cb(new Error('camera actuating failed'));
     }
 
-    cb && cb(null, url);
+    var result = {
+      contentType: 'image/jpeg',
+      url: url
+    };
+
+    cb && cb(null, result);
   }
 
   switch (cmd) {

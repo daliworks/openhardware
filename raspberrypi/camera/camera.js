@@ -1,7 +1,9 @@
 'use strict';
-var async = require('async');
-var locks = require('locks'),
+var async = require('async'),
+    locks = require('locks'),
     exec = require('child_process').exec;
+
+var dropboxUrlParser = require('./dropbox-driect-url');
 
 function Camera(pin) {
   this.mutex = locks.createMutex();
@@ -39,6 +41,11 @@ Camera.prototype.snapPicture = function (cb) {
         exec('rm -f ' + filenameLocaldir);
 
         return done(null, url[0]);
+      });
+    },
+    function (url, done) {
+      dropboxUrlParser(url, function (err, directUrl) {
+        return done(null, directUrl);
       });
     }],
     function (err, url) {
