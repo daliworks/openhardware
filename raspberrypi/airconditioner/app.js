@@ -43,9 +43,12 @@ function airconditionerActuating(cmd, options, cb) {
   switch (cmd) {
     case 'on':
       airconditioner.on(_callback);
+      break;
     case 'off':
       airconditioner.off(_callback);
+      break;
     default:
+      logger.error('unknown cmd', cmd);
       return cb && cb(new Error('unknown cmd'));
   }
 }
@@ -64,7 +67,7 @@ function actuating(name, cmd, options, cb) {
     return cb && cb(new Error('invalid sensor name'));
   }
 
-  sensor.actuating(cmd, options, function (err, reults) {
+  sensor.actuating(cmd, options, function (err, result) {
     if (err) {
       logger.error('actuating faied');
       return cb && cb(err);
