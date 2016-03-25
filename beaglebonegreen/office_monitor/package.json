@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "jsonrpc-tcp": "git+https://github.com/daliworks/node-jsonrpc-tcp.git",
+    "lodash": "*",
+    "locks": "*",
+    "i2c": "*",
+    "serialport": "1.7.4",
+    "winston": "*"
+  }
+}
+
