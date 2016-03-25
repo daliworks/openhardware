@@ -3,7 +3,7 @@
     "jsonrpc-tcp": "git+https://github.com/daliworks/node-jsonrpc-tcp.git",
     "lodash": "*",
     "locks": "*",
-    "i2c": "*",
+    "i2c": "0.1.8",
     "serialport": "1.7.4",
     "winston": "*"
   }
