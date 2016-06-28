@@ -116,7 +116,7 @@ Device.prototype.sensing = function () {
         return result('err'); 
       }
 
-      sensor.driver.getValue(function (err, vaule) {
+      sensor.driver.getValue(function (err, value) {
         logger.info('%s value:%s', sensor.name, value);
         return result(null, {value: value, status: 'on'});
       });
