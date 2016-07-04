@@ -46,8 +46,11 @@ fi
 check_running() {
   if [ -f $PID_FILE ] ; then
     PID=`cat $PID_FILE`
-    ps -p $PID > /dev/null 2>&1
-    return $? 
+    CHECK_PS=`ps | sed -n "/^ *${PID}/p"`
+    if [ -n "$CHECK_PS" ]; then
+      return 0;
+    fi
+    #return $? 
   fi
 
   return 1;
@@ -68,12 +71,7 @@ start() {
 
 stop() {
   sync
-  if [[ $(uname) == CYGWIN* ]]; then
-    taskkill /F /PID `cat $PID_FILE`
-  else
-    pkill -F $PID_FILE 2> /dev/null;
-  fi
-
+  kill $(cat $PID_FILE) 2> /dev/null;
   rm -f $PID_FILE;
 }
 
