@@ -13,6 +13,7 @@ var jsonrpc = require('jsonrpc-tcp'),
     log4js = require('log4js');
 
 var Lcd = require('./grovePiLcd'),
+    String = require('./string'),
     grovePiSensors = require('./grovePiSensors');
 
 //log4js.configure(__dirname + '/logger_cfg.json', {
@@ -110,6 +111,12 @@ DEVICES = [{
       name: 'humidity',
       notification: false
     },
+    {
+      id: [device0Id, 'string'].join('-'),
+      type: 'string',
+      name: 'string',
+      notification: false
+    },
     { // actuator
       id: [device0Id, 'lcd'].join('-'),
       type: 'lcd',
@@ -121,6 +128,7 @@ DEVICES = [{
 
 var sensorNames = [];
 var grovePiLcd = new Lcd();
+var stringSensor = new String();
 
 // util function: find target sensor from DEVICES
 function getSensorInfo(cond) {
@@ -172,7 +180,11 @@ var Sensor = {
 
     if (target.name === 'lcd') {
       sensorData = grovePiLcd.getData(target.name);
-    } else {
+    } 
+    else if (target.name === 'string') {
+      sensorData = stringSensor.getValueSync();
+    }
+    else {
       sensorData = grovePiSensors.getData(target.name);
     }
     return result(null, {value: sensorData && sensorData.value, status: (sensorData && sensorData.status) || 'err'});
