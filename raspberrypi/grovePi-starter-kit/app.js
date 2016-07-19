@@ -13,7 +13,8 @@ var jsonrpc = require('jsonrpc-tcp'),
     log4js = require('log4js');
 
 var Lcd = require('./grovePiLcd'),
-    String = require('./string'),
+    StringSensor = require('./string-sensor'),
+    StringActuator = require('./string-actuator'),
     grovePiSensors = require('./grovePiSensors');
 
 //log4js.configure(__dirname + '/logger_cfg.json', {
@@ -114,7 +115,13 @@ DEVICES = [{
     {
       id: [device0Id, 'string'].join('-'),
       type: 'string',
-      name: 'string',
+      name: 'stringSensor',
+      notification: false
+    },
+    {
+      id: [device0Id, 'stringActuator'].join('-'),
+      type: 'stringActuator',
+      name: 'stringActuator',
       notification: false
     },
     { // actuator
@@ -128,7 +135,8 @@ DEVICES = [{
 
 var sensorNames = [];
 var grovePiLcd = new Lcd();
-var stringSensor = new String();
+var stringSensor = new StringSensor();
+var stringActuator = new StringActuator();
 
 // util function: find target sensor from DEVICES
 function getSensorInfo(cond) {
@@ -156,6 +164,8 @@ var Sensor = {
 
     if (target.name === 'lcd') {
       grovePiLcd.doCommand(target.name, cmd, options);
+    } else if (target.name === 'stringActuator') {
+      stringActuator.doCommand(target.name, cmd, options);
     } else {
       grovePiSensors.doCommand(target.name, cmd, options);
     }
@@ -181,7 +191,10 @@ var Sensor = {
     if (target.name === 'lcd') {
       sensorData = grovePiLcd.getData(target.name);
     } 
-    else if (target.name === 'string') {
+    else if (target.name === 'stringActuator') {
+      sensorData = stringActuator.getValue(target.name);
+    }
+    else if (target.name === 'stringSensor') {
       sensorData = stringSensor.getValueSync();
     }
     else {
