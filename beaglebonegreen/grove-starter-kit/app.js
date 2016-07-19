@@ -7,6 +7,7 @@ var jsonrpc = require('jsonrpc-tcp'),
 var Button = require('./button'),
     ChainableRGBLed = require('./chainableRGBLed'),
     Accelerometer3Axis = require('./accelerometer3Axis'),
+    String = require('./string'),
     Oled = require('./oled');
 
 var logger = log4js.getLogger('T+EMBEDDED');
@@ -30,6 +31,10 @@ function Device(id) {
     type: 'accelerometer',
     notification: true,
     constructor: Accelerometer3Axis
+  }, {
+    name: 'stringSensor',
+    type: 'string',
+    constructor: String,
   }, {
     name: 'oled(12x12)',
     type: 'lcd',
