@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "jsonrpc-tcp": "git+https://github.com/daliworks/node-jsonrpc-tcp.git",
+    "lodash": "4.13.1",
+    "async": "1.5.2",
+    "locks": "0.2.2",
+    "i2c": "0.1.8",
+    "config": "0.4.37",
+    "serialport": "1.7.4",
+    "log4js": "0.6.37",
+    "request": "2.72.0",
+    "json-fs-store": "1.0.0"
+  }
+}
