@@ -7,8 +7,8 @@ var EventEmitter = require('events').EventEmitter,
     request = require('request');
 
 var enertalkURL = 'https://enertalk-auth.encoredtech.com/token';
-var enertalkClientId = 'eW91bmdoeXVuLmpvQGRhbGl3b3Jrcy5uZXRfVGhpbmdwbHVz';
-var enertalkClientSecret = 'pg11145x6dt7og8ye7g14282vt3q503a6xb0515';
+var enertalkClientId = '';
+var enertalkClientSecret = '';
 
 function postAccessToken(headers, form, cb) {
   function _errorHandling(err) {
