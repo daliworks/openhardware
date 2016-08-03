@@ -15,6 +15,17 @@ var deviceAgent = [{
   deviceAddress: 0,
   deviceModelId: "jsonrpcFullV1.0",
   sensors:[
+    /* Enertalk Dependent
+    {
+      name: 'Power',
+      type: 'electricPower',
+      getValue: enertalkGetPower
+    },
+    {
+      name: 'EnergyMeter-OauthCode',
+      type: 'stringActuator'
+    },
+    */
     {
       name: 'Indoor-Temperature',
       type: 'temperature',
@@ -24,11 +35,6 @@ var deviceAgent = [{
       name: 'Indoor-Humidity',
       type: 'humidity',
       getValue: th02.getHumidity
-    },
-    {
-      name: 'Voting',
-      type: 'reader',
-      notification: true
     },
     {
       name: 'AIR_CONDITIONER',
@@ -43,15 +49,6 @@ var deviceAgent = [{
       name: 'Airconditioner-Target-FanSpeed',
       type: 'string',
       getValue: airconditioner.getTargetFanSpeed
-    },
-    {
-      name: 'Power',
-      type: 'electricPower',
-      getValue: enertalkGetPower
-    },
-    {
-      name: 'EnergyMeter-OauthCode',
-      type: 'stringActuator'
     }]
 }];
 
