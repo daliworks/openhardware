@@ -15,6 +15,7 @@ var jsonrpc = require('jsonrpc-tcp'),
 var Lcd = require('./grovePiLcd'),
     StringSensor = require('./string-sensor'),
     StringActuator = require('./string-actuator'),
+    NumberSensor = require('./number'),
     airconditioner = require('./airconditioner'),
     grovePiSensors = require('./grovePiSensors');
 
@@ -46,6 +47,24 @@ DEVICES = [{
   deviceAddress: device0Id,
   sensors: [
     {
+      id: [device0Id, 'number'].join('-'),
+      type: 'number',
+      name: 'numberSensor',
+      notification: false
+    },
+    {
+      id: [device0Id, 'string'].join('-'),
+      type: 'string',
+      name: 'stringSensor',
+      notification: false
+    },
+    {
+      id: [device0Id, 'stringActuator'].join('-'),
+      type: 'stringActuator',
+      name: 'stringActuator',
+      notification: false
+    },
+    {
       id: [device0Id, 'airConditioner'].join('-'),
       name: 'AIR_CONDITIONER',
       type: 'airConditioner'
@@ -69,12 +88,6 @@ DEVICES = [{
       name: 'rotary',
       notification: false
     },
-//    {
-//      id: [device0Id, 'vib'].join('-'),
-//      type: 'vibration',
-//      name: 'vibration',
-//      notification: false
-//    },
     // Digital
     { // actuator
       id: [device0Id, 'buzz'].join('-'),
@@ -118,18 +131,6 @@ DEVICES = [{
       name: 'humidity',
       notification: false
     },
-    {
-      id: [device0Id, 'string'].join('-'),
-      type: 'string',
-      name: 'stringSensor',
-      notification: false
-    },
-    {
-      id: [device0Id, 'stringActuator'].join('-'),
-      type: 'stringActuator',
-      name: 'stringActuator',
-      notification: false
-    },
     { // actuator
       id: [device0Id, 'lcd'].join('-'),
       type: 'lcd',
@@ -143,6 +144,7 @@ var sensorNames = [];
 var grovePiLcd = new Lcd();
 var stringSensor = new StringSensor();
 var stringActuator = new StringActuator();
+var numberSensor = new NumberSensor();
 
 // util function: find target sensor from DEVICES
 function getSensorInfo(cond) {
@@ -204,6 +206,9 @@ var Sensor = {
     }
     else if (target.name === 'stringSensor') {
       sensorData = stringSensor.getValueSync();
+    }
+    else if (target.name === 'numberSensor') {
+      sensorData = numberSensor.getValueSync();
     }
     else {
       sensorData = grovePiSensors.getData(target.name);
