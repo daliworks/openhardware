@@ -200,7 +200,11 @@ var Sensor = {
     else {
       sensorData = grovePiSensors.getData(target.name);
     }
-    return result(null, {value: sensorData && sensorData.value, status: (sensorData && sensorData.status) || 'err'});
+    return result(null,
+      {
+        value: sensorData && sensorData.value,
+        status: (sensorData && sensorData.status) || 'err'
+      });
   }
 };
 
@@ -209,6 +213,7 @@ var server = jsonrpc.createServer(function (client/*, remote*/) {
   clientConnection = client;
   logger.warn('New client connection');
 });
+
 // Handling client connection error
 server.on('clientError', function(err, conn) {
   logger.error('Connection closed');
@@ -219,12 +224,15 @@ server.on('clientError', function(err, conn) {
     });
   }
 });
+
 // Exposing JSON-RPC services
 server.expose('discover', function discover(result) { 
   logger.info('discovering', JSON.stringify(DEVICES));
   return result(null, DEVICES);
 });
+
 server.expose('sensor', Sensor);
+
 // Start listening JSON-RPC server
 server.listen(JSONRPC_PORT, function () {
   logger.info('listening port=%d', JSONRPC_PORT);

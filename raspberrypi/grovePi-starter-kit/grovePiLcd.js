@@ -66,8 +66,9 @@ GrovePiLcd.prototype.doingCommand = function (name, command, options) {
 
   if (command === 'print') {
     var text = [];
-    for (var i=0; i<LCD_NR_COLS; i++)
+    for (var i=0; i<LCD_NR_COLS; i++) {
       text[i] = ' ';
+    }
 
     var row = options.row || 0;
     var column = options.column || 0;

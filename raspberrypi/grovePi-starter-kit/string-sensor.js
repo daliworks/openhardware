@@ -1,21 +1,19 @@
-'use strict'
+'use strict';
 
-function String() {
-};
+function StringSensor() {
+}
 
-String.prototype.getValueSync = function () {
+StringSensor.prototype.getValueSync = function () {
   var userDefinedString = new Date().toString(); //TODO FIXME YOUR STRING
 
   return {
    value: userDefinedString, 
    status: 'on'
   };
-}
+};
 
-String.prototype.statusSync = function () {
+StringSensor.prototype.statusSync = function () {
   return 'on';
-}
+};
 
-module.exports = String;
-
-
+module.exports = StringSensor;

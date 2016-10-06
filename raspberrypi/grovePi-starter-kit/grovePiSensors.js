@@ -121,43 +121,8 @@ GrovePiSensors.prototype.init = function (sensorNames) {
         self.sensors.temperature.instance = self.sensors.humidity.instance =
           new DHTDigitalSensor(7, DHTDigitalSensor.VERSION.DHT11, DHTDigitalSensor.CELSIUS);
 
-        console.log('Ultrasonic Digital Sensor (start watch)');
-        /*
-        self.sensors.ultrasonic.instance.on('change', function (value) {
-          var ultrasonicState;
-          if (value < 20) {
-            ultrasonicState = 1;
-          } else {
-            ultrasonicState = 0;
-          }
+        logger.info('Ultrasonic Digital Sensor (start watch)');
 
-          if (!_.isUndefined(self.sensors.ultrasonic.preValue) &&
-              self.sensors.ultrasonic.preValue === ultrasonicState) {
-            return;
-          }
-
-          if (!self.sensors.ultrasonic.timer) {
-            if (ultrasonicState) {
-              logger.info('send event', 'ultrasonic', 1, value);
-              self.emit('event', 'ultrasonic', 1);
-
-              self.sensors.ultrasonic.timer = setTimeout(function () {
-                if (!self.sensors.ultrasonic.preValue) {
-                  logger.info('send event', 'ultrasonic', 0);
-                  self.emit('event', 'ultrasonic', 0);
-                }
-                self.sensors.ultrasonic.timer = null;
-              }, 15 * 1000);
-            } else {
-              if (self.sensors.ultrasonic.preValue !== ultrasonicState) {
-                logger.info('send event', 'ultrasonic', 0, value);
-                self.emit('event', 'ultrasonic', 0);
-              }
-            }
-          }
-          self.sensors.ultrasonic.preValue = ultrasonicState;
-        });
-        */
         self.sensors.ultrasonic.instance.on('change', function (value) {
           var ultrasonicValue;
 
@@ -184,7 +149,7 @@ GrovePiSensors.prototype.init = function (sensorNames) {
             } else {
               logger.debug('onChange', 'ultrasonic', 'setTimeout', ultrasonicValue);
               self.sensors.ultrasonic.timer = setTimeout(function () {
-                logger.debug('send event', 'ultrasonic', self.sensors.ultrasonic.preValue);
+                logger.info('send event', 'ultrasonic', self.sensors.ultrasonic.preValue);
                 self.emit('event', 'ultrasonic', self.sensors.ultrasonic.preValue);
                 self.sensors.ultrasonic.timer = null;
               }, ULTRASONIC_VALID_DURATION);
@@ -197,7 +162,7 @@ GrovePiSensors.prototype.init = function (sensorNames) {
         });
         self.sensors.ultrasonic.instance.watch(100);
 
-        console.log('Button Digital Sensor (start watch)');
+        logger.info('Button Digital Sensor (start watch)');
         self.sensors.button.instance.on('change', function(buttonState) {
 
           if (!_.isUndefined(self.sensors.button.preValue) &&
