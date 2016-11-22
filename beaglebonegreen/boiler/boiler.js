@@ -1,4 +1,4 @@
-'use strinct'
+'use strinct';
 
 var fs = require('fs');
 
@@ -63,7 +63,7 @@ if (require.main === module) {
   var b = new Boiler(20);
   b.turnOn(function (err) { 
     b.getValue(function (err, data){
-      console.log(data)
-    })
+      console.log(data);
+    });
   });
 }

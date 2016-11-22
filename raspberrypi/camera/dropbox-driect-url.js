@@ -21,5 +21,5 @@ module.exports = dropboxImageDirectUrlParser;
 
 if (require.main === module) {
   var url = 'https://db.tt/cmDO24Ju';
-  dropboxImageDirectUrlParser(url, function (err, url) {console.log(url)});
+  dropboxImageDirectUrlParser(url, function (err, url) {console.log(url);});
 }

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var exec = require('child_process').exec,
     _ = require('lodash'),

@@ -75,7 +75,15 @@ function ButtonDigitalSensor(pin) {
 ButtonDigitalSensor.prototype = new DigitalSensor();
 ButtonDigitalSensor.prototype.read = function() {
   var res = DigitalSensor.prototype.read.call(this);
-  var buttonState = (res && res.length > 0)? res[0] : 0;
+  var buttonState;
+
+  if (res && res.length > 0) {
+    buttonState = res[0];
+  }
+  else {
+    buttonState = 0;
+  }
+
   return buttonState;
 };
 

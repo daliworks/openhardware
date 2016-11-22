@@ -11,7 +11,7 @@ function Co2(serialPort, cbReady) {
   }
 
   this.serial = new SerialPort(serialPort, {
-    baudrate: 9600,
+    baudrate: 9600
   });
 
   var self = this;
@@ -41,7 +41,7 @@ Co2.prototype.getCo2 = function (cb) {
     if (err || results != CO2_GET_CMD.length) {
       console.log('getCo2 failed');
 
-      return cb && cb (new Error('write co2 cmd failed'))
+      return cb && cb (new Error('write co2 cmd failed'));
     }
   });
 

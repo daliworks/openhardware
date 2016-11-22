@@ -18,7 +18,7 @@ var devices = [{
       name: 'PIR',
       type: 'motion',
       notification: true
-    },
+    }
     /*
     {
       name: 'LED',

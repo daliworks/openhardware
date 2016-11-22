@@ -110,8 +110,8 @@ var sensor = {
     }, 60000);
 
     return tubeCallback(null);
-  },
-}
+  }
+},
 
 tubeServer.init = function (deviceList, cbSensing, cbActuating, cbStatus) {
   function _sensorIdInit(devices) {
@@ -176,22 +176,21 @@ tubeServer.sendValue = function (deviceAddress, name, value) {
 
 ////////////////////////////////////////////////////////////////////////////
 function deviceList() {
-  return [
-  {
+  return [{
     deviceAddress: 0,
     deviceModelId: 'PowerOutlet',
     sensors:[{
       name: 'POWER',
       type: 'power',
-      notification: false,
+      notification: false
     }, {
       name: 'WATTAGE',
       type: 'wattage',
-      notification: false,
+      notification: false
     }, {
       name: 'CURRENT',
       type: 'current',
-      notification: false,
+      notification: false
     }]
   },
   {
@@ -200,11 +199,11 @@ function deviceList() {
     sensors: [{
       name: 'VOLTAGE',
       type: 'voltage',
-      notification: false,
+      notification: false
     }, {
       name: 'WATTAGE',
       type: 'wattage',
-      notification: false,
+      notification: false
     }]
   }, 
   {
@@ -213,11 +212,11 @@ function deviceList() {
     sensors: [{
       name: 'ONOFF',
       type: 'onoff',
-      notification: true,
+      notification: true
     }, {
       name: 'WATTAGE',
       type: 'wattage',
-      notification: false,
+      notification: false
     }]
   }, 
   {
@@ -226,7 +225,7 @@ function deviceList() {
     sensors: [{
       name: 'ONOFF',
       type: 'onoff',
-      notification: true,
+      notification: true
     }]
   }, 
   {
@@ -235,11 +234,11 @@ function deviceList() {
     sensors: [{
       name: 'HUMIDITY',
       type: 'humidity',
-      notification: true,
+      notification: true
     }, {
       name: 'TEMPERATURE',
       type: 'temperature',
-      notification: true,
+      notification: true
     }]
   }, 
   {
@@ -248,23 +247,13 @@ function deviceList() {
     sensors: [{
       name: 'ONOFF',
       type: 'onoff',
-      notification: true,
+      notification: true
     }]
-  }
-  ]
+  }];
 }
 
 if (require.main === module) {
-  function cbSensing () {
-  }
-
-  function cbActuating () {
-  }
-
-  function cbStatus () {
-  }
-
-  tubeServer.init(deviceList(), cbSensing, cbActuating, cbStatus);
+  tubeServer.init(deviceList(), null, null, null);
   /*
   sensor.get('0-CO2',function (err, value) {
   console.log(err)

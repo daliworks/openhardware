@@ -17,7 +17,7 @@ function Lcd (i2c_device, column, row) {
     console.log('Force to use /dev/i2c-1');
     i2c = '/dev/i2c-1';
   } else {
-    i2c = i2c_device
+    i2c = i2c_device;
   }
 
   this.bl_i2c = new I2c(BACKLIGHT_I2C_ADDR, {device: i2c, debug: false});
@@ -54,7 +54,12 @@ Lcd.prototype.print = function (val, cb) {
   val += '';
 
   displayFills = Math.floor(val.length / 80);
-  index = displayFills > 1 ? (displayFills - 1) * 80 : 0;
+  if (displayFills > 1) {
+    index = (displayFills - 1) * 80;
+  }
+  else {
+    index = 0;
+  }
 
   this._printChar(val, index, cb);
 };

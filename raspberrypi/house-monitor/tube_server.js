@@ -122,8 +122,8 @@ var sensor = {
     }, 60000);
 
     return tubeCallback(null);
-  },
-}
+  }
+};
 
 tubeServer.sendValue = function (deviceAddress, name, value) {
   if (!tubeServer.client) {

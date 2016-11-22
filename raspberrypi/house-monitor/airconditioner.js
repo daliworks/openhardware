@@ -64,7 +64,7 @@ function setTemperature(temperature, cb) {
     }
 
     targetTemperature = temperature;
-    params = fanSpeedString(targetFanSpeed) + '_' + targetTemperature;
+    var params = fanSpeedString(targetFanSpeed) + '_' + targetTemperature;
 
     console.log(params);
     irSend(params, cb);
@@ -98,7 +98,7 @@ function fanSpeedUp(cb) {
       return cb && cb (new Error('on failed'));
     }
 
-    params = fanSpeedString(++targetFanSpeed) + '_' + targetTemperature;
+    var params = fanSpeedString(++targetFanSpeed) + '_' + targetTemperature;
 
     console.log(params);
     irSend(params, cb);
@@ -115,7 +115,7 @@ function fanSpeedDown(cb) {
       return cb && cb (new Error('on failed'));
     }
 
-    params = fanSpeedString(--targetFanSpeed) + '_' + targetTemperature;
+    var params = fanSpeedString(--targetFanSpeed) + '_' + targetTemperature;
 
     console.log(params);
     irSend(params, cb);

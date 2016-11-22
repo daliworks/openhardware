@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var exec = require('child_process').exec,
     log4js = require('log4js'),

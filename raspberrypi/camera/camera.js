@@ -64,6 +64,6 @@ module.exports = Camera;
 
 if (require.main === module) {
   var c = new Camera();
-  c.snapPicture(function (err, url) {console.log(url)});
+  c.snapPicture(function (err, url) {console.log(url);});
 }
 

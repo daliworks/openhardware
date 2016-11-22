@@ -23,7 +23,7 @@ function postAccessToken(headers, form, cb) {
     {
       url: enertalkURL,
       headers: headers,
-      form: form,
+      form: form
     },
     function parsingResponse(err, res) {
       if (err) {
@@ -72,7 +72,7 @@ function refreshAccessToken(cb) {
 
   var form = {
     'grant_type': "refresh_token",
-    'refresh_token': config.refreshToken,
+    'refresh_token': config.refreshToken
   };
 
   postAccessToken(headers, form, function (err, accessToken) {
@@ -113,8 +113,8 @@ function oauth () {
 
     if (config.refreshToken) {
       process.nextTick(function () {
-        refreshAccessToken(_refreshAccessTokenCallback)}
-      );
+        refreshAccessToken(_refreshAccessTokenCallback);
+      });
     }
   }
   else {
@@ -139,7 +139,7 @@ oauth.prototype.requestAccessToken = function requestAccessToken(authorizationCo
     client_id: enertalkClientId,
     client_secret: enertalkClientSecret,
     grant_type: 'authorization_code',
-    code: authorizationCode,
+    code: authorizationCode
   };
 
   return postAccessToken(headers, form, function (err, accessToken) {

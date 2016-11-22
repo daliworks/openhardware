@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var exec = require('child_process').exec,
     _ = require('lodash'),
@@ -60,8 +60,8 @@ if (require.main === module) {
   var chainableRGBLed = new ChainableRGBLed('./3.Wooden_Lamp_BBG');
 
   var argv = process.argv.slice(2),
-      r = argv[0] || 255;
-      g = argv[1] || 255;
+      r = argv[0] || 255,
+      g = argv[1] || 255,
       b = argv[2] || 255;
 
   chainableRGBLed.turnOn(r, g, b);

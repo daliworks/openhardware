@@ -34,7 +34,7 @@ function Device(id) {
   }, {
     name: 'stringSensor',
     type: 'string',
-    constructor: String,
+    constructor: String
   }, {
     name: 'oled(12x12)',
     type: 'lcd',

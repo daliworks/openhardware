@@ -65,7 +65,7 @@ function callSpawn(file, args, options, cb) {
       return;
     }
 
-    cb && cb (null, file, args, options)
+    cb && cb (null, file, args, options);
   });
 }
 

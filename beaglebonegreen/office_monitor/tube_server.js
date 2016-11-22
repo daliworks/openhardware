@@ -13,7 +13,7 @@ var logger = new (winston.Logger)({
       json: false,
       handleExceptions: true,
       humanReadableUnhandledException: true,
-      level: 'debug'}),
+      level: 'debug'})
   ]
 });
 
@@ -35,7 +35,7 @@ function discover (tubeCallback) {
       id: sensor.id, 
       type: sensor.type,
       name: sensor.name, 
-      notification: sensor.eventSensor ? true : false,
+      notification: sensor.eventSensor
     });
 
     logger.debug('discovered. name:%s type:%s', sensor.name, sensor.type);
@@ -93,7 +93,6 @@ var sensor = {
       return tubeCallback(null, result);
     });
   },
-
   setNotification: function (sensorId, tubeCallback) {
     logger.info('setNotification');
 
@@ -119,8 +118,8 @@ var sensor = {
     }, 6000);
 
     return tubeCallback(null);
-  },
-}
+  }
+};
 
 tubeServer.init = function (sensorList, cbDiscover, cbSensing, cbActuating, cbStatus) {
   function _sensorIdInit(sensors) {
@@ -188,27 +187,27 @@ function sensorList() {
     name: 'CO2',
     type: 'co2',
     eventSensor: false,
-    getValue: function (cb) {cb(null, 1)},
-    getStatus: function () {return 'on'},
+    getValue: function (cb) {cb(null, 1);},
+    getStatus: function () {return 'on';}
   }, {
     name: 'OnOff',
     type: 'onoff',
     eventSensor: true,
-    getValue: function (cb) {cb(null, 1)},
-    getStatus: function () {return 'on'},
+    getValue: function (cb) {cb(null, 1);},
+    getStatus: function () {return 'on';}
   }, {
     name: 'SOIL_MOISTURE',
     type: 'soilMoisture',
     eventSensor: false,
-    getValue: function (cb) {cb(null, 1)},
-    getStatus: function () {return 'on'},
+    getValue: function (cb) {cb(null, 1);},
+    getStatus: function () {return 'on';}
   }];
 }
 
 if (require.main === module) {
   tubeServer.init(sensorList);
   sensor.get('0-CO2',function (err, value) {
-  console.log(err)
-  console.log(value)
+  console.log(err);
+  console.log(value);
   });
 }

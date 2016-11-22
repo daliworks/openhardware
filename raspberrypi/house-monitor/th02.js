@@ -19,7 +19,7 @@ var th02 = {
   i2c: new I2c(0x40, {device: I2C_DEVICE_NODE}),
   lpfTemperature: new Lpf(0.2),
   lpfHumidity: new Lpf(0.2),
-  mutex: locks.createMutex(),
+  mutex: locks.createMutex()
 };
 
 function getStatusSync() {

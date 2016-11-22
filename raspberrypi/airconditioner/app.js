@@ -15,7 +15,7 @@ var logger = new (winston.Logger)({
       json: false,
       handleExceptions: true,
       humanReadableUnhandledException: true,
-      level: 'debug'}),
+      level: 'debug'})
   ]
 });
 
@@ -26,7 +26,7 @@ deviceAgent.sensors = [
   {
     name: 'Airconditioner',
     type: 'powerSwitch',
-    actuating: airconditionerActuating,
+    actuating: airconditionerActuating
   }
 ];
 

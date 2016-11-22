@@ -5,8 +5,7 @@ var jsonrpc = require('jsonrpc-tcp'),
     _ = require('lodash');
 
 var tubeServer = require('./tube_server'),
-    Co2 = require('./grove_co2'),
-    Th02 = require('./th02');
+    Co2 = require('./grove_co2'), Th02 = require('./th02');
 
 var logger = new (winston.Logger)({
   transports: [
@@ -17,7 +16,7 @@ var logger = new (winston.Logger)({
       json: false,
       handleExceptions: true,
       humanReadableUnhandledException: true,
-      level: 'debug'}),
+      level: 'debug'})
   ]
 });
 
@@ -29,15 +28,15 @@ deviceAgent.sensors = [
   {
     name: 'Co2',
     type: 'co2',
-    getValue: co2.getCo2.bind(co2),
+    getValue: co2.getCo2.bind(co2)
   }, {
     name: 'Temperature',
     type: 'temperature',
-    getValue: th02.getTemperature.bind(th02),
+    getValue: th02.getTemperature.bind(th02)
   }, {
     name: 'Humidity',
     type: 'humidity',
-    getValue: th02.getHumidity.bind(th02),
+    getValue: th02.getHumidity.bind(th02)
   }
 ];
 
