@@ -1,23 +1,12 @@
 'use strict';
 
 var jsonrpc = require('jsonrpc-tcp'),
-    winston = require('winston'),
+    log4js = require('log4js'),
     _ = require('lodash');
 
 var airconditioner = require('./airconditioner');
 
-var logger = new (winston.Logger)({
-  transports: [
-    new (winston.transports.Console)({label: 'DEVICE_AGENT'}),
-    new (winston.transports.File)({
-      label: 'DEVICE_AGENT', 
-      filename: 'log/device_agent.log', 
-      json: false,
-      handleExceptions: true,
-      humanReadableUnhandledException: true,
-      level: 'debug'})
-  ]
-});
+var logger = log4js.getLogger('DA');
 
 var tubeServer = require('./tube_server');
 

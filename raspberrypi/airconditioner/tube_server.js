@@ -1,21 +1,10 @@
 var jsonrpc = require('jsonrpc-tcp'),
     util = require('util'),
     events = require('events'),
-    winston = require('winston'),
+    log4js = require('log4js'),
     _ = require('lodash');
 
-var logger = new (winston.Logger)({
-  transports: [
-    new (winston.transports.Console)({label: 'TUBE_SERVER'}),
-    new (winston.transports.File)({
-      label: 'TUBE_SERVER', 
-      filename: 'log/device_agent.log', 
-      json: false,
-      handleExceptions: true,
-      humanReadableUnhandledException: true,
-      level: 'debug'})
-  ]
-});
+var logger = log4js.getLogger('Tube');
 
 var TUBE_PORT = 50800;
 var DEVICE_ID = 0;

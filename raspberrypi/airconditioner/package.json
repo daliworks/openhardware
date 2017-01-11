@@ -1,9 +1,9 @@
 {
   "dependencies": {
     "jsonrpc-tcp": "git+https://github.com/daliworks/node-jsonrpc-tcp.git",
+    "log4js": "*",
     "lodash": "*",
-    "locks": "*",
-    "winston": "*"
+    "locks": "*"
   }
 }
 
