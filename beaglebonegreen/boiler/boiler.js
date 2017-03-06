@@ -1,4 +1,4 @@
-'use strinct';
+'use strict';
 
 var fs = require('fs');
 
