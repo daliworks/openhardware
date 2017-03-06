@@ -1,4 +1,5 @@
 'use strict';
+
 var async = require('async'),
     locks = require('locks'),
     exec = require('child_process').exec;
@@ -51,11 +52,10 @@ Camera.prototype.snapPicture = function (cb) {
     function (err, url) {
       self.mutex.unlock();
       if (err) {
-        cb && cb(err);
-        return;
+        return cb && cb(err);
       }
 
-      cb && cb(null, url);
+      return cb && cb(null, url);
     }
   );
 };

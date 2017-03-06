@@ -11,6 +11,35 @@ var logger = log4js.getLogger('T+EMBEDDED');
 var JSONRPC_PORT = 50800;
 var STATUS_INTERVAL = 60000;  // status report interval; less than gateway one.
 
+function _actuatingCamera(sensor, cmd, options, cb) {
+  function _callback(err, url) {
+    if (err) {
+      logger.error('camera actuating failed');
+      return cb && cb(new Error('camera actuating failed'));
+    }
+
+    var result = {
+      contentType: 'image/jpeg',
+      url: url
+    };
+
+    return cb && cb(null, result);
+  }
+
+  switch (cmd) {
+  case 'snapPicture':
+    sensor.driver.snapPicture(_callback);
+    break;
+  default:
+    if (cb) {
+      process.nextTick(function () {
+        cb(new Error('unknown cmd(%s)', cmd));
+      });
+    }
+    break;
+  }
+}
+
 function Device(id) {
   this.sensors = [{
     name: 'camera',
@@ -32,35 +61,6 @@ function getSensorById(sensors, id) {
   return _.find(sensors, {'name': name} );
 }
 
-function _actuatingCamera(sensor, cmd, options, cb) {
-  function _callback(err, url) {
-    if (err) {
-      logger.error('camera actuating failed');
-      cb && cb(new Error('camera actuating failed'));
-    }
-
-    var result = {
-      contentType: 'image/jpeg',
-      url: url
-    };
-
-    cb && cb(null, result);
-  }
-
-  switch (cmd) {
-  case 'snapPicture':
-    sensor.driver.snapPicture(_callback);
-    break;
-  default:
-    if (cb) {
-      process.nextTick(function () {
-        cb(new Error('unknown cmd(%s)', cmd));
-      });
-    }
-    break;
-  }
-}
-
 Device.prototype.sensing = function () {
   var self = this;
 
@@ -72,7 +72,7 @@ Device.prototype.sensing = function () {
         return result('err'); 
       }
 
-      sensor.driver.getValue(function (err, vaule) {
+      sensor.driver.getValue(function (err, value) {
         logger.info('%s value:%s', sensor.name, value);
         return result(null, {value: value, status: 'on'});
       });
@@ -82,7 +82,7 @@ Device.prototype.sensing = function () {
       var sensor = getSensorById(self.sensors, id);
 
       if (_.isNull(sensor) || _.isUndefined(sensor)) {
-        logger.error("getsensorbyid failed. id:" + id);
+        logger.error('getsensorbyid failed. id:' + id);
         return result('err'); 
       }
 
@@ -184,7 +184,9 @@ Device.prototype._serverInit = function () {
     self.pushStatus.splice(0, self.pushStatus.length);
 
     _.forEach(self.sensors, function (sensor) {
-      sensor.driver.cleanup && sensor.driver.cleanup();
+      if (sensor.driver.cleanup) {
+        sensor.driver.cleanup();
+      }
     });
 
     logger.info('client disconnected');
