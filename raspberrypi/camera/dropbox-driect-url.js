@@ -1,3 +1,5 @@
+'use strict';
+
 var request = require('request');
 
 function dropboxImageDirectUrlParser(url, cb) {
@@ -10,8 +12,7 @@ function dropboxImageDirectUrlParser(url, cb) {
       return cb && cb(error);
     }
 
-    var redirectUrl = response.headers.location;
-    var imageUrl = redirectUrl.replace('www.dropbox.com', 'dl.dropboxusercontent.com');
+    var imageUrl = url.replace('www.dropbox.com', 'dl.dropboxusercontent.com');
 
     return cb && cb(null, imageUrl);
   });
