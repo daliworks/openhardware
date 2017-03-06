@@ -24,23 +24,30 @@ Accelerometer3Axis.prototype.statusSync = function () {
 Accelerometer3Axis.prototype.getValue = function (cb) {
   var self = this;
   exec(this.cmd, function (err, stdout, stderr) {
-    if (err) {
-      logger.error('exec(%s) failed', self.cmd);
+    var value;
 
-      cb && cb(new Error('EXEC FAILED'));
-      return;
+    if (err) {
+      logger.error('exec(%s) failed', self.cmd, err);
+
+      return cb && cb(new Error('EXEC FAILED'));
     }
 
-    var value = JSON.parse(stdout);
-    cb && cb(null, value);
+    try {
+      value = JSON.parse(stdout);
+    } catch (e) {
+      logger.error(e);
+      return cb && cb(e);
+    }
+
+    return cb && cb(null, value);
   });
 };
 
 Accelerometer3Axis.prototype.trigger = function (cb) {
   var self = this;
 
-  function IsChanged(newValue, oldValue) {
-    function IsInRange(newValue, oldValue, threshold) {
+  function isChanged(newValue, oldValue) {
+    function isInRange(newValue, oldValue, threshold) {
       if (newValue >  oldValue + threshold || newValue < oldValue - threshold) {
         return false;
       } else {
@@ -48,13 +55,13 @@ Accelerometer3Axis.prototype.trigger = function (cb) {
       }
     }
 
-    if (!IsInRange(newValue.x, oldValue.x, CHANGED_THRESHOLD)) {
+    if (!isInRange(newValue.x, oldValue.x, CHANGED_THRESHOLD)) {
       return true;
     }
-    else if (!IsInRange(newValue.y, oldValue.y, CHANGED_THRESHOLD)) {
+    else if (!isInRange(newValue.y, oldValue.y, CHANGED_THRESHOLD)) {
       return true;
     }
-    else if (!IsInRange(newValue.z, oldValue.z, CHANGED_THRESHOLD)) {
+    else if (!isInRange(newValue.z, oldValue.z, CHANGED_THRESHOLD)) {
       return true;
     }
 
@@ -68,13 +75,15 @@ Accelerometer3Axis.prototype.trigger = function (cb) {
   this.triggerTimer = setInterval(function () {
     self.getValue(function (err, value) {
       if (err) {
+        logger.error('getValue error:', err);
         return;
       }
 
-      if (IsChanged(value, self.lastValue)) {
+      if (isChanged(value, self.lastValue)) {
+        logger.info('value changed:', value);
         self.lastValue = value;
 
-        cb && cb(null, value);
+        return cb && cb(null, value);
       }
     });
   }, 1000);
@@ -86,6 +95,7 @@ Accelerometer3Axis.prototype.cleanup = function () {
   }
 
   clearInterval(this.triggerTimer);
+  this.triggerTimer = null;
 };
 
 if (require.main === module) {

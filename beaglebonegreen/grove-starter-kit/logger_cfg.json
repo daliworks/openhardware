@@ -1,7 +1,10 @@
 {
   "levels": {
-    "Main":         "INFO",
-    "Sensor":         "INFO"
+    "T+EMBEDDED": "INFO",
+    "ACCELEROMETER": "INFO",
+    "BUTTON": "INFO",
+    "RGBLED": "INFO",
+    "OLED": "INFO"
   },
   "replaceConsole": true,
   "appenders": [
@@ -13,4 +16,3 @@
     }
   ]
 }
-

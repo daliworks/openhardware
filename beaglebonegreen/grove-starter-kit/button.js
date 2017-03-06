@@ -28,8 +28,7 @@ Button.prototype.getValue = function (cb) {
       logger.error('exec(%s) failed', self.cmd);
       logger.error(err);
 
-      cb && cb(new Error('EXEC FAILED'));
-      return;
+      return cb && cb(new Error('EXEC FAILED'));
     }
 
     var value = stdout;
@@ -39,8 +38,7 @@ Button.prototype.getValue = function (cb) {
       value = 0;
     }
 
-    cb && cb(null, value);
-    return;
+    return cb && cb(null, value);
   });
 };
 
@@ -54,13 +52,15 @@ Button.prototype.trigger = function (cb) {
   this.triggerTimer = setInterval(function () {
     self.getValue(function (err, value) {
       if (err) {
+        logger.error('button getValue err:', err);
         return;
       }
 
       if (self.lastValue !== value) {
+        logger.info('button value:', value);
         self.lastValue = value;
 
-        cb && cb(null, value);
+        return cb && cb(null, value);
       }
     });
   }, 1000);
@@ -72,6 +72,7 @@ Button.prototype.cleanup = function () {
   }
 
   clearInterval(this.triggerTimer);
+  this.triggerTimer = null;
 };
 
 if (require.main === module) {

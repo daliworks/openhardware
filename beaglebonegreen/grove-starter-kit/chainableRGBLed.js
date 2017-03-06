@@ -27,8 +27,7 @@ ChainableRGBLed.prototype.turnOn = function (r, g, b, cb) {
   exec(cmdWithParameter, function (err, stdout, stderr) {
     if (err) {
       logger.error('exec(%s) failed', cmdWithParameter);
-      cb && cb(new Error('EXEC FAILED'), r, g, b);
-      return;
+      return cb && cb(new Error('EXEC FAILED'), r, g, b);
     }
 
     logger.info('actuating success');
@@ -38,7 +37,7 @@ ChainableRGBLed.prototype.turnOn = function (r, g, b, cb) {
     this.g = g;
     this.b = b;
 
-    cb && cb(null, {r:r, g:g, b:b});
+    return cb && cb(null, {r:r, g:g, b:b});
   }.bind(this));
 };
 
@@ -49,7 +48,7 @@ ChainableRGBLed.prototype.turnOff = function (cb) {
 ChainableRGBLed.prototype.getValue = function (cb) {
   if (cb) {
     process.nextTick(function () {
-      cb(null, {r:this.r, g:thisg, b:this.b});
+      cb(null, {r:this.r, g:this.g, b:this.b});
     });
   }
 

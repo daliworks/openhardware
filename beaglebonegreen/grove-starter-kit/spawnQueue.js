@@ -1,3 +1,5 @@
+'use strict';
+
 var _ = require('lodash'),
     spawn = require('child_process').spawn;
 
@@ -61,11 +63,10 @@ function callSpawn(file, args, options, cb) {
 
   running.on('close', function(code) {
     if (code) {
-      cb && cb (new Error('Exit with code(%d)', code));
-      return;
+      return cb && cb (new Error('Exit with code(%d)', code));
     }
 
-    cb && cb (null, file, args, options);
+    return cb && cb (null, file, args, options);
   });
 }
 
@@ -82,11 +83,14 @@ SpawnQueue.prototype.push = function(file /*, args, options, cb*/) {
 
     callSpawn(egg.file, egg.args, egg.options, function (err, file, args, option) {
       if (err) {
-        egg.cb && egg.cb(err);
+        if (egg.cb) {
+          egg.cb(err);
+        }
       }
       else {
-        egg.cb && egg.cb(null,
-          {file: egg.file, args: egg.args, options: egg.options});
+        if (egg.cb) {
+          egg.cb(null, { file: egg.file, args: egg.args, options: egg.options });
+        }
       }
       
       self.eggs.shift();
@@ -100,7 +104,6 @@ SpawnQueue.prototype.push = function(file /*, args, options, cb*/) {
   var opts = normalizeArgs.apply(null, arguments);
 
   if (_.size(this.eggs) === this.maxEggs) {
-    cb && cb(new Error('SpawnQueue is full'));
     return;
   }
 

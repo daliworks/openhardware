@@ -7,7 +7,7 @@ var jsonrpc = require('jsonrpc-tcp'),
 var Button = require('./button'),
     ChainableRGBLed = require('./chainableRGBLed'),
     Accelerometer3Axis = require('./accelerometer3Axis'),
-    String = require('./string'),
+    StringSensor = require('./stringSensor'),
     Oled = require('./oled');
 
 var logger = log4js.getLogger('T+EMBEDDED');
@@ -15,54 +15,14 @@ var logger = log4js.getLogger('T+EMBEDDED');
 var JSONRPC_PORT = 50800;
 var STATUS_INTERVAL = 60000;  // status report interval; less than gateway one.
 
-function Device(id) {
-  this.sensors = [{
-    name: 'button',
-    type: 'onoff',
-    notification: true,
-    constructor: Button
-  }, {
-    name: 'rgbLed',
-    type: 'rgbLed',
-    constructor: ChainableRGBLed,
-    actuating: _actuatingChainableRGBLed
-  }, {
-    name: 'accelerometer',
-    type: 'accelerometer',
-    notification: true,
-    constructor: Accelerometer3Axis
-  }, {
-    name: 'stringSensor',
-    type: 'string',
-    constructor: String
-  }, {
-    name: 'oled(12x12)',
-    type: 'lcd',
-    constructor: Oled,
-    actuating: _actuatingOled
-  }];
-
-  this.id = id;
-  this.pushStatus = [];
-  this.pushStatusTimer = null;
-
-  this._init();
-  this._serverInit();
-}
-
-function getSensorById(sensors, id) {
-  var name = id.substring(id.indexOf('-')+1);
-  return _.find(sensors, {'name': name} );
-}
-
 function _actuatingOled(sensor, cmd, options, cb) {
   function _callback(err, value) {
     if (err) {
       logger.error('oled actuating failed');
-      cb && cb(new Error('oled actuating failed'));
+      return cb && cb(new Error('oled actuating failed'));
     }
 
-    cb && cb(null, 'success');
+    return cb && cb(null, 'success');
   }
 
   switch (cmd) {
@@ -86,11 +46,10 @@ function _actuatingChainableRGBLed(sensor, cmd, options, cb) {
   function callback(err, value) {
     if (err) {
       logger.error('chainableRGBLed actuating failed');
-      cb && cb(new Error('chainableRGBLed actuating failed'));
-      return;
+      return cb && cb(new Error('chainableRGBLed actuating failed'));
     }
 
-    cb && cb(null, 'success');
+    return cb && cb(null, 'success');
   }
 
   switch (cmd) {
@@ -108,6 +67,46 @@ function _actuatingChainableRGBLed(sensor, cmd, options, cb) {
     }
     break;
   }
+}
+
+function Device(id) {
+  this.sensors = [{
+    name: 'button',
+    type: 'onoff',
+    notification: true,
+    constructor: Button
+  }, {
+    name: 'rgbLed',
+    type: 'rgbLed',
+    constructor: ChainableRGBLed,
+    actuating: _actuatingChainableRGBLed
+  }, {
+    name: 'accelerometer',
+    type: 'accelerometer',
+    notification: true,
+    constructor: Accelerometer3Axis
+  }, {
+    name: 'stringSensor',
+    type: 'string',
+    constructor: StringSensor,
+  }, {
+    name: 'oled(12x12)',
+    type: 'lcd',
+    constructor: Oled,
+    actuating: _actuatingOled
+  }];
+
+  this.id = id;
+  this.pushStatus = [];
+  this.pushStatusTimer = null;
+
+  this._init();
+  this._serverInit();
+}
+
+function getSensorById(sensors, id) {
+  var name = id.substring(id.indexOf('-')+1);
+  return _.find(sensors, {'name': name} );
 }
 
 Device.prototype.sensing = function () {
@@ -131,7 +130,7 @@ Device.prototype.sensing = function () {
       var sensor = getSensorById(self.sensors, id);
 
       if (_.isNull(sensor) || _.isUndefined(sensor)) {
-        logger.error("getsensorbyid failed. id:" + id);
+        logger.error('getsensorbyid failed. id:' + id);
         return result('err'); 
       }
 
@@ -140,6 +139,7 @@ Device.prototype.sensing = function () {
         return result('err');
       }
 
+    logger.info('setNoti pushStatus:', id, self.pushStatus);
       if (_.find(self.pushStatus, {'name': sensor.name})) {
         logger.warn('%s is already notified', sensor.name);
         return result(null);
@@ -147,8 +147,10 @@ Device.prototype.sensing = function () {
 
       self.pushStatus.push(sensor);
 
+    logger.info('setNoti 1');
       sensor.driver.trigger(function (err, value) {
         if (_.isNull(self.client)) {
+    logger.info('setNoti 1-1');
           return;
         }
 
@@ -156,12 +158,16 @@ Device.prototype.sensing = function () {
           params: [id, {value: value}] });
       });
 
+    logger.info('setNoti 2');
       if (self.pushStatusTimer) {
+    logger.info('setNoti 2-1');
         return result(null);
       }
 
+    logger.info('setNoti 3');
       self.pushStatusTimer = setInterval(function () {
         if ( _.isNull(self.client) || _.isUndefined(self.client)) {
+    logger.info('setNoti 3-1');
           return;
         }
 
@@ -171,6 +177,7 @@ Device.prototype.sensing = function () {
          });
        });
       }, STATUS_INTERVAL);
+    logger.info('setNoti 4');
 
       return result(null);
     },
@@ -224,16 +231,21 @@ Device.prototype._serverInit = function () {
   });
 
   server.on('clientError', function (err, conn) {
+    logger.error('client disconnected');
     self.client = null;
 
     if (self.pushStatusTimer) {
       clearInterval(self.pushStatusTimer);
+      self.pushStatusTimer = null;
     }
 
     self.pushStatus.splice(0, self.pushStatus.length);
+    logger.info('disconn pushStatus:', self.pushStatus);
 
     _.forEach(self.sensors, function (sensor) {
-      sensor.driver.cleanup && sensor.driver.cleanup();
+      if (sensor.driver.cleanup) {
+        sensor.driver.cleanup();
+      }
     });
 
     logger.info('client disconnected');

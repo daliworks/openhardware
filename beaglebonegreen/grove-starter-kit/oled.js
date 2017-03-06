@@ -5,7 +5,7 @@ var log4js = require('log4js'),
 
 var spawnQueue = require('./spawnQueue');
 
-var logger = log4js.getLogger('ACCELEROMETER');
+var logger = log4js.getLogger('OLED');
 var NR_ROW = 11,
     NR_COLUMN = 11;
 
@@ -44,20 +44,22 @@ Oled.prototype.print = function (str, x, y, cb) {
     return;
   }
 
-  if (x > NR_ROW || x < 0 || _.isNull(x) || _.isUndefined(x))
+  if (x > NR_ROW || x < 0 || _.isNull(x) || _.isUndefined(x)) {
     x = 0;
-  if (y > NR_COLUMN || y < 0 || _.isNull(y) || _.isUndefined(y))
+  }
+
+  if (y > NR_COLUMN || y < 0 || _.isNull(y) || _.isUndefined(y)) {
     y = 0;
+  }
 
   this.spawnQueue.push('python', [this.pyArgv1, 'print', str, x, y],
     function (err, result) {
       if (err) {
-        cb && cb(new Error('print failed. str:%s x:%d y:%d', str, x, y));
-        return;
+        return cb && cb(new Error('print failed. str:%s x:%d y:%d', str, x, y));
       }
 
       logger.info('atuating success.str:%s x:%d y:%d', str, x, y);
-      cb && cb(null, {str: str, x: x, y: y});
+      return cb && cb(null, {str: str, x: x, y: y});
     });
 };
 
@@ -66,11 +68,10 @@ Oled.prototype.clear = function (y, cb) {
 
   var spawnArgs = [this.pyArgv1, 'clear'];
 
-  if (y === -1 || _.isNull(y) || _.isUndefined(y)) {
-  }
-  else {
-    if (y > NR_COLUMN)
+  if (!(y === -1 || _.isNull(y) || _.isUndefined(y))) {
+    if (y > NR_COLUMN) {
       y =0;
+    }
     spawnArgs.push(y);
   }
 
@@ -79,18 +80,17 @@ Oled.prototype.clear = function (y, cb) {
 
   this.spawnQueue.push('python', spawnArgs, function (err, result) {
     if (err) {
-        cb && cb(new Error('clear failed'));
-        return;
+        return cb && cb(new Error('clear failed'));
     }
 
     logger.info('atuating success.clear');
-    cb && cb(null);
+    return cb && cb(null);
   });
 };
 
 Oled.prototype.cleanup = function () {
   this.spawnQueue.drain();
-}
+};
 
 module.exports = Oled;
 
@@ -105,4 +105,3 @@ if (require.main === module) {
   oled.clear(null, 0);
 }
 */
-
