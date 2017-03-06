@@ -11,6 +11,18 @@ var logger = log4js.getLogger('T+EMBEDDED');
 var JSONRPC_PORT = 50800;
 var STATUS_INTERVAL = 60000;  // status report interval; less than gateway one.
 
+function boilerActuating(sensor, cmd, options, result) {
+  if (cmd === 'on') {
+    sensor.driver.turnOn(result);
+  }
+  else if (cmd === 'off') {
+    sensor.driver.turnOff(result);
+  }
+  else {
+    result(new Error('unknown cmd'));
+  }  
+}
+
 function Device(id) {
   this.sensors = [{
     name: 'B0',
@@ -31,18 +43,6 @@ function Device(id) {
 function getSensorById(sensors, id) {
   var name = id.substring(id.indexOf('-')+1);
   return _.find(sensors, {'name': name} );
-}
-
-function boilerActuating(sensor, cmd, options, result) {
-  if (cmd === 'on') {
-    sensor.driver.turnOn(result);
-  }
-  else if (cmd == 'off') {
-    sensor.driver.turnOff(result);
-  }
-  else {
-    result(new Error('unknown cmd'));
-  }  
 }
 
 Device.prototype.sensing = function () {
@@ -69,7 +69,7 @@ Device.prototype.sensing = function () {
       var sensor = getSensorById(self.sensors, id);
 
       if (_.isNull(sensor) || _.isUndefined(sensor)) {
-        logger.error("getsensorbyid failed. id:" + id);
+        logger.error('getsensorbyid failed. id:' + id);
         return result('err'); 
       }
 
@@ -171,7 +171,9 @@ Device.prototype._serverInit = function () {
     self.pushStatus.splice(0, self.pushStatus.length);
 
     _.forEach(self.sensors, function (sensor) {
-      sensor.driver.cleanup && sensor.driver.cleanup();
+      if (sensor.driver.cleanup) {
+        sensor.driver.cleanup();
+      }
     });
 
     logger.info('client disconnected');
