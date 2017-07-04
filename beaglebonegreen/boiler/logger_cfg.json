@@ -6,7 +6,7 @@
   "appenders": [
     {
       "type": "file",
-      "filename": "grove_arduino.log" ,
+      "filename": "boiler_bbg.log" ,
       "maxLogSize": 524288,
       "backups": 10
     }

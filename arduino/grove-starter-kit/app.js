@@ -14,6 +14,7 @@ var ToggleSensor = require('./toggleSensor'),
     Lcd = require('./lcd'),
     Temperature = require('./temperature');
 
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
 var logger = log4js.getLogger('T+EMBEDDED');
 
 var JSONRPC_PORT = 50800;

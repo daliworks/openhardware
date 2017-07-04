@@ -6,10 +6,12 @@ var jsonrpc = require('jsonrpc-tcp'),
 
 var Camera = require('./camera');
 
-var logger = log4js.getLogger('T+EMBEDDED');
-
 var JSONRPC_PORT = 50800;
 var STATUS_INTERVAL = 60000;  // status report interval; less than gateway one.
+var logger;
+
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('T+EMBEDDED');
 
 function _actuatingCamera(sensor, cmd, options, cb) {
   function _callback(err, url) {

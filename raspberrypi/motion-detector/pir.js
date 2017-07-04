@@ -1,10 +1,16 @@
+'use strict';
+
 var log4js = require('log4js'),
-    GPIO = require('onoff').Gpio,
-    logger = log4js.getLogger('PIR');
+    GPIO = require('onoff').Gpio;
+    
+var logger;
+
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('PIR');
 
 function Pir(gpio) {
   this.gpio = new GPIO(gpio, 'in', 'both');
-};
+}
 
 Pir.prototype.watch = function (cb) {
   this.gpio.watch(function (err, value) {
@@ -25,7 +31,7 @@ Pir.prototype.watch = function (cb) {
 
 Pir.prototype.readSync = function () {
   return this.gpio.readSync();
-}
+};
 
 module.exports = Pir;
 

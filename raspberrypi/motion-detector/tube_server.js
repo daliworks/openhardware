@@ -1,15 +1,20 @@
+'use strict';
+
 var jsonrpc = require('jsonrpc-tcp'),
     _ = require('lodash'),
-    log4js = require('log4js'),
-    logger = log4js.getLogger('TUBE_SERVER');
+    log4js = require('log4js');
 
 var TUBE_PORT = 50800;
 var tubeServer = exports;
+var logger;
+
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('TUBE_SERVER');
 
 function sensorObjectGet(deviceAddress, sensorName) {
   var sensorObject;
   _.forEach(tubeServer.devices[deviceAddress].sensors, function (sensor) {
-    if (sensor.name == sensorName) {
+    if (sensor.name === sensorName) {
       sensorObject = sensor;
       return false;
     }

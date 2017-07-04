@@ -1,5 +1,7 @@
+'use strict';
+
 var exec = require('child_process').exec,
-    logger = require('log4js').getLogger('AIRCONDITIONAL'),
+    log4js = require('log4js'),
     locks = require('locks');
 
 var mutex = locks.createMutex();
@@ -7,6 +9,10 @@ var mutex = locks.createMutex();
 var targetTemperature = -1;
 var targetFanSpeed = -1;
 var airconditionStatus = 'OFF';
+var logger;
+
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('AirConditioner');
 
 function irSend(params, cb) {
   if (params.indexOf('NONE') >= 0) {
@@ -32,16 +38,16 @@ function irSend(params, cb) {
 function fanSpeedString() {
   switch (targetFanSpeed) {
     case -1:
-      return "NONE";
+      return 'NONE';
     case 0:
-      return "LOW";
+      return 'LOW';
     case 1:
-      return "MID";
+      return 'MID';
     case 2:
-      return "HIGH";
+      return 'HIGH';
     default:
       logger.error('Invalid targetFanSpeed %d', targetFanSpeed);
-      return "unknown";
+      return 'unknown';
   }
 }
 

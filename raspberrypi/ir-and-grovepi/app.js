@@ -18,13 +18,16 @@ var Lcd = require('./grovePiLcd'),
     NumberSensor = require('./number'),
     airconditioner = require('./airconditioner'),
     grovePiSensors = require('./grovePiSensors');
+    
+var logger;
 
 //log4js.configure(__dirname + '/logger_cfg.json', {
 //  reloadSecs: 30,
 //  cwd: './log'
 //});
 
-var logger = log4js.getLogger('Main');
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('Main');
 
 /**
  * Configuration

@@ -1,15 +1,20 @@
+'use strict';
+
 var jsonrpc = require('jsonrpc-tcp'),
     util = require('util'),
     events = require('events'),
     log4js = require('log4js'),
     _ = require('lodash');
 
-var logger = log4js.getLogger('Tube');
-
 var TUBE_PORT = 50800;
 var DEVICE_ID = 0;
 
 var tubeServer = exports;
+
+var logger;
+
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('Tube');
 
 function discover (tubeCallback) {
   logger.debug('discover');

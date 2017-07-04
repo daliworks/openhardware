@@ -11,9 +11,7 @@
 var _ = require('lodash'),
     util = require('util'),
     events = require('events'),
-    logger = require('log4js').getLogger('Sensor');
-
-logger.setLevel('INFO');
+    log4js = require('log4js');
 
 // for GrovePi
 var GrovePi = require('node-grovepi').GrovePi,
@@ -27,6 +25,11 @@ var GrovePi = require('node-grovepi').GrovePi,
 var ADC = 5; // 5V
 var GROVE_VCC = 5; // 5V
 var ULTRASONIC_VALID_DURATION = 1000;
+
+var logger;
+
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('Sensor');
 
 function RotaryAngleAnalogSensor(pin) {
   this.preDegree = 0;

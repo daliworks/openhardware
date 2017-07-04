@@ -10,10 +10,13 @@ var Button = require('./button'),
     StringSensor = require('./stringSensor'),
     Oled = require('./oled');
 
-var logger = log4js.getLogger('T+EMBEDDED');
-
 var JSONRPC_PORT = 50800;
 var STATUS_INTERVAL = 60000;  // status report interval; less than gateway one.
+
+var logger;
+
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('T+EMBEDDED');
 
 function _actuatingOled(sensor, cmd, options, cb) {
   function _callback(err, value) {

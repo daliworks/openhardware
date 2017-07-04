@@ -22,8 +22,6 @@ var Lcd = require('./grovePiLcd'),
 //  cwd: './log'
 //});
 
-var logger = log4js.getLogger('Main');
-
 /**
  * Configuration
  **/
@@ -137,6 +135,11 @@ var sensorNames = [];
 var grovePiLcd = new Lcd();
 var stringSensor = new StringSensor();
 var stringActuator = new StringActuator();
+
+var logger;
+
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('Main');
 
 // util function: find target sensor from DEVICES
 function getSensorInfo(cond) {

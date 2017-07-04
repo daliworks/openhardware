@@ -11,8 +11,13 @@ var logger = new (winston.Logger)({
   transports: [
     new (winston.transports.Console)({label: 'DEVICE_AGENT'}),
     new (winston.transports.File)({
-      label: 'DEVICE_AGENT', 
-      filename: 'log/device_agent.log', 
+      label: 'DEVICE_AGENT',
+      filename: 'log/device_agent.log',
+      timestamp: true,
+      maxsize: 524288,
+      maxFiles: 10,
+      tailable: true,
+      zippedArchive: true,
       json: false,
       handleExceptions: true,
       humanReadableUnhandledException: true,

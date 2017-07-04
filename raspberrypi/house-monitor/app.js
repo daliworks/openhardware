@@ -1,7 +1,7 @@
 'use strict';
 
 var jsonrpc = require('jsonrpc-tcp'),
-    logger = require('log4js').getLogger('deviceAgent'),
+    log4js = require('log4js'),
     EventEmitter = require('events').EventEmitter,
     _ = require('lodash');
 
@@ -51,6 +51,11 @@ var deviceAgent = [{
       getValue: airconditioner.getTargetFanSpeed
     }]
 }];
+
+var logger;
+
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('DeviceAgent');
 
 function enertalkGetPower(cb) {
 

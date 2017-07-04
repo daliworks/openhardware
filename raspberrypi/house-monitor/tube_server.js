@@ -1,13 +1,18 @@
+'use strict';
+
 var jsonrpc = require('jsonrpc-tcp'),
     util = require('util'),
     events = require('events'),
     log4js = require('log4js'),
     _ = require('lodash');
 
-var logger = log4js.getLogger('TUBE_SERVER');
+var logger;
 
 var TUBE_PORT = 50800;
 var tubeServer = exports;
+
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('Tube');
 
 function getDeviceAddress(sensorId) {
   return sensorId.split('-')[0];

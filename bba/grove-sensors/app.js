@@ -9,10 +9,10 @@ var tubeServer = require('./tube_server'),
     Oled = require('./oled'),
     Th02 = require('./th02');
 
-var logger = log4js.getLogger('DA');
 var th02 = new Th02();
 var oled = new Oled();
 var mutex = locks.createMutex();
+var logger;
 
 var deviceAgent ={};
 deviceAgent.sensors = [
@@ -33,9 +33,12 @@ deviceAgent.sensors = [
   }
 ];
 
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('DA');
+
 function discover(cb) {
   logger.debug('request discover');
-  cb && cb(deviceAgent.sensors);
+  return cb && cb(deviceAgent.sensors);
 }
 
 function sensing(name, cb) {
@@ -52,7 +55,7 @@ function sensing(name, cb) {
   mutex.lock(function () {
     sensor.getValue(function (err, sensorValue) {
       mutex.unlock();
-      cb && cb(err, sensorValue);
+      return cb && cb(err, sensorValue);
     });
   });
 }
@@ -61,10 +64,10 @@ function _oledActuation(cmd, options, cb) {
   function _callback(err, value) {
     if (err) {
       logger.error('oled actuating failed');
-      cb && cb(new Error('oled actuating failed'));
+      return cb && cb(new Error('oled actuating failed'));
     }
 
-    cb && cb(null, 'success');
+    return cb && cb(null, 'success');
   }
 
   switch (cmd) {
@@ -100,7 +103,7 @@ function actuating(name, cmd, options, cb) {
 
 function sensorStatus(name, cb) {
   logger.debug('request %s status', name);
-  cb && cb('on');
+  return cb && cb('on');
 }
 
 deviceAgent.init = function () {

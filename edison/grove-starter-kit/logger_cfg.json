@@ -1,7 +1,6 @@
 {
   "levels": {
-    "Main":         "INFO",
-    "Sensor":         "INFO"
+    "T+EMBEDDED": "INFO"
   },
   "replaceConsole": true,
   "appenders": [

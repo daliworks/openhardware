@@ -5,11 +5,12 @@ var jsonrpc = require('jsonrpc-tcp'),
     _ = require('lodash');
 
 var Boiler = require('./boiler');
-
-var logger = log4js.getLogger('T+EMBEDDED');
-
 var JSONRPC_PORT = 50800;
 var STATUS_INTERVAL = 60000;  // status report interval; less than gateway one.
+var logger;
+
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('T+EMBEDDED');
 
 function boilerActuating(sensor, cmd, options, result) {
   if (cmd === 'on') {

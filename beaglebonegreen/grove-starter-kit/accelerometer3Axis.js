@@ -4,8 +4,11 @@ var exec = require('child_process').exec,
     log4js = require('log4js'),
     _ = require('lodash');
 
-var logger = log4js.getLogger('ACCELEROMETER');
 var CHANGED_THRESHOLD = 0.08;
+var logger;
+
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('ACCELEROMETER');
 
 function Accelerometer3Axis(pySourceDir) {
   if (_.isNull(pySourceDir) || _.isUndefined(pySourceDir)) {

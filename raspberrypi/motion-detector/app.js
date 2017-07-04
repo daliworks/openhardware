@@ -1,7 +1,6 @@
 'use strict';
 
 var log4js = require('log4js'),
-    logger = log4js.getLogger('DEVICEAGENT'),
     _ = require('lodash');
 
 var Pir = require('./pir'),
@@ -13,7 +12,7 @@ var pir = new Pir(27);
 
 var devices = [{
     deviceAddress: 0,
-    deviceModelId: "jsonrpcFullV1.0",
+    deviceModelId: 'jsonrpcFullV1.0',
     sensors:[{
       name: 'PIR',
       type: 'motion',
@@ -26,6 +25,11 @@ var devices = [{
     }*/]
   }
 ];
+
+var logger;
+
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('DEVICEAGENT');
 
 
 function actuating(deviceAddress, name, cmd, options, cb) {

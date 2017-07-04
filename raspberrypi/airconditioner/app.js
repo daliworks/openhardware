@@ -6,11 +6,9 @@ var jsonrpc = require('jsonrpc-tcp'),
 
 var airconditioner = require('./airconditioner');
 
-var logger = log4js.getLogger('DA');
-
 var tubeServer = require('./tube_server');
 
-var deviceAgent ={};
+var deviceAgent = {};
 deviceAgent.sensors = [
   {
     name: 'Airconditioner',
@@ -18,6 +16,11 @@ deviceAgent.sensors = [
     actuating: airconditionerActuating
   }
 ];
+
+var logger;
+
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('DA');
 
 function airconditionerActuating(cmd, options, cb) {
   function _callback(err) {

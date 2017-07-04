@@ -1,3 +1,5 @@
+'use strict';
+
 var jsonrpc = require('jsonrpc-tcp'),
     util = require('util'),
     events = require('events'),
@@ -13,6 +15,11 @@ var logger = new (winston.Logger)({
       json: false,
       handleExceptions: true,
       humanReadableUnhandledException: true,
+      timestamp: true,
+      maxsize: 524288,
+      maxFiles: 10,
+      tailable: true,
+      zippedArchive: true,
       level: 'debug'})
   ]
 });
@@ -96,8 +103,9 @@ var sensor = {
   setNotification: function (sensorId, tubeCallback) {
     logger.info('setNotification');
 
-    if (tubeServer.eventSensorStatusMonitor)
+    if (tubeServer.eventSensorStatusMonitor) {
       return tubeCallback(null);
+    }
 
     tubeServer.eventSensorStatusMonitor = setInterval(function () {
       if (!tubeServer.client) {
@@ -161,7 +169,7 @@ tubeServer.init = function (sensorList, cbDiscover, cbSensing, cbActuating, cbSt
   server.listen(TUBE_PORT, function () {
     logger.info('listening port %d', TUBE_PORT);
   });
-}
+};
 
 tubeServer.sendValue = function (name, value) {
   if (!tubeServer.client) {
@@ -178,7 +186,7 @@ tubeServer.sendValue = function (name, value) {
   this.client.send({method: 'sensor.notification',
     params: [sensor.id, {value: value}] 
   });
-}
+};
 
 /////////////////////
 

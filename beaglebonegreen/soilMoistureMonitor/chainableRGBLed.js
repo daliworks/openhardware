@@ -3,8 +3,10 @@
 var exec = require('child_process').exec,
     _ = require('lodash'),
     log4js = require('log4js');
+var logger;
 
-var logger = log4js.getLogger('RGBLED');
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('RGBLED');
 
 function ChainableRGBLed(pySourceDir) {
   if (_.isNull(pySourceDir) || _.isUndefined(pySourceDir)) {

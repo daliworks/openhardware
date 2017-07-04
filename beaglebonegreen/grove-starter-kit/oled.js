@@ -5,9 +5,13 @@ var log4js = require('log4js'),
 
 var spawnQueue = require('./spawnQueue');
 
-var logger = log4js.getLogger('OLED');
 var NR_ROW = 11,
     NR_COLUMN = 11;
+
+var logger;
+
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+logger = log4js.getLogger('OLED');
 
 function Oled(pySourceDir) {
   if (_.isNull(pySourceDir) || _.isUndefined(pySourceDir)) {

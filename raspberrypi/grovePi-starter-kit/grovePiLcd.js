@@ -3,8 +3,7 @@
 var util = require('util'),
     events = require('events'),
     _ = require('lodash'),
-    async = require('async'),
-    logger = require('log4js').getLogger('Main');
+    async = require('async');
 
 var Lcd = require('./lcdI2c');
 
