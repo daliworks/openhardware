@@ -15,7 +15,7 @@ var STATUS_INTERVAL = 60000;  // status report interval; less than gateway one.
 
 var logger;
 
-log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30, cwd: 'log' });
 logger = log4js.getLogger('T+EMBEDDED');
 
 function _actuatingOled(sensor, cmd, options, cb) {

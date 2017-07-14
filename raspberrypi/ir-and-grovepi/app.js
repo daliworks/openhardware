@@ -26,7 +26,7 @@ var logger;
 //  cwd: './log'
 //});
 
-log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30, cwd: 'log' });
 logger = log4js.getLogger('Main');
 
 /**

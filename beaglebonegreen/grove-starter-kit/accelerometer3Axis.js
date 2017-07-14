@@ -7,7 +7,7 @@ var exec = require('child_process').exec,
 var CHANGED_THRESHOLD = 0.08;
 var logger;
 
-log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30, cwd: 'log' });
 logger = log4js.getLogger('ACCELEROMETER');
 
 function Accelerometer3Axis(pySourceDir) {

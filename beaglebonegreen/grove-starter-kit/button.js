@@ -5,7 +5,7 @@ var exec = require('child_process').exec,
     _ = require('lodash');
 var logger;
 
-log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30, cwd: 'log' });
 logger = log4js.getLogger('BUTTON');
 
 function Button(pySourceDir) {

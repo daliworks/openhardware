@@ -11,7 +11,7 @@ var logger;
 var TUBE_PORT = 50800;
 var tubeServer = exports;
 
-log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30, cwd: 'log' });
 logger = log4js.getLogger('Tube');
 
 function getDeviceAddress(sensorId) {

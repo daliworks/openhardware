@@ -5,7 +5,7 @@ var log4js = require('log4js'),
     
 var logger;
 
-log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30 });
+log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30, cwd: 'log' });
 logger = log4js.getLogger('PIR');
 
 function Pir(gpio) {
