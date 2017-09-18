@@ -38,7 +38,7 @@ start() {
   if check_running ; then
     echo "already running"
   else
-    cd $APP_DIR
+    cd $BASE_DIR
     PWD=$BASE_DIR $NODE $BASE_DIR/app.js 2>&1 >> $LOG_DIR/thingplus_device.log &
     echo $! > $PID_FILE;
     echo "thingplus device started"
