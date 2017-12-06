@@ -145,7 +145,7 @@ Device.prototype.discovering = function (result) {
   var devices = [];
   var self = this;
 
-  devices[this.id] = {deviceAddress: this.id};
+  devices[this.id] = {deviceAddress: this.id, deviceModelId: 'jsonrpcFullV1.0'};
   devices[this.id]['sensors'] = [];
 
   _.forEach(this.sensors, function (sensor) {
