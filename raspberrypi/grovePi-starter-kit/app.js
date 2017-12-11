@@ -41,6 +41,7 @@ device0Id = '0',   // device address, any string allowed for url
  */
 DEVICES = [{
   deviceAddress: device0Id,
+  deviceModelId: 'jsonrpcFullV1.0',
   sensors: [
     // Analog
     {
