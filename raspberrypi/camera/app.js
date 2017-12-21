@@ -176,7 +176,7 @@ Device.prototype._serverInit = function () {
     self.client = client;
   });
 
-  server.on('clientError', function (err, conn) {
+  server.on('clientError', function (/*err, conn*/) {
     self.client = null;
 
     if (self.pushStatusTimer) {
@@ -202,4 +202,5 @@ Device.prototype._serverInit = function () {
   });
 };
 
+// jshint unused:false
 var device = new Device('0');

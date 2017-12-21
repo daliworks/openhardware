@@ -1,9 +1,9 @@
+'use strict';
+
 var request = require('request'),
     config = require('config');
 
-module.exports = function () {
-  'use strict';
-
+module.exports = (function () {
   var enertalkURL = 'https://api.encoredtech.com/1.2/devices/';
 
   function getDataFromEnertalk(accessToken, url, cb) {
@@ -35,7 +35,7 @@ module.exports = function () {
           return _errorHandling(new Error('JSON.parse failed. body:' + body));
         }
 
-        if (res.statusCode != 200) {
+        if (res.statusCode !== 200) {
           return _errorHandling(new Error('Invalid statusCode ' + res.statusCode +  ' ' + body.error));
         }
 
@@ -73,7 +73,7 @@ module.exports = function () {
     }
 
     if (!config.deviceId) {
-      getDeviceId(accessToken, function (err, deviceId) {
+      getDeviceId(accessToken, function (err/*, deviceId*/) {
         if (err) {
           console.log('[ERR] getDeviceId failed');
           return cb && cb(new Error('getDeviceId failed'));
@@ -82,8 +82,7 @@ module.exports = function () {
         url = enertalkURL + config.deviceId + '/realtimeUsage';
         return _getPower();
       });
-    }
-    else {
+    } else {
       url = enertalkURL + config.deviceId + '/realtimeUsage';
       return _getPower();
     }
@@ -92,7 +91,7 @@ module.exports = function () {
   return {
     getPower: getPower,
   };
-}();
+})();
 
 if (require.main === module) {
   var oauth = require('./oauth');

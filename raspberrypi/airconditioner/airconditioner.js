@@ -1,3 +1,5 @@
+'use strict';
+
 var exec = require('child_process').exec,
     locks = require('locks');
 
@@ -7,7 +9,7 @@ var mutex = locks.createMutex();
 exports.on = function (cb) {
   var cmd = 'irsend SEND_ONCE LGE_6711A20015N UN-JEON/JEONG-JI_22';
   mutex.lock(function () {
-    exec(cmd, function (err, stdout, stderr) {
+    exec(cmd, function (err/*, stdout, stderr*/) {
       mutex.unlock();
       if (err) {
         return cb && cb(err);
@@ -22,7 +24,7 @@ exports.on = function (cb) {
 exports.off = function (cb) {
   var cmd = 'irsend SEND_ONCE LGE_6711A20015N UN-JEON/JEONG-JI_OFF';
   mutex.lock(function () {
-    exec(cmd, function (err, stdout, stderr) {
+    exec(cmd, function (err/*, stdout, stderr*/) {
       mutex.unlock();
       if (err) {
         return cb && cb(err);
@@ -33,6 +35,6 @@ exports.off = function (cb) {
   });
 };
 
-if (require.main == module) {
+if (require.main === module) {
   exports.on();
 }

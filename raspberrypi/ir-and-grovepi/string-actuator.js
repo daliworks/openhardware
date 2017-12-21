@@ -1,3 +1,5 @@
+'use strict';
+
 function StringActuator() {
 }
 
@@ -8,8 +10,8 @@ StringActuator.prototype.doCommand = function(name, cmd, options) {
   }
 };
 
-StringActuator.prototype.getValue = function (name) {
-  return {status: 'on'};
+StringActuator.prototype.getValue = function (/*name*/) {
+  return { status: 'on' };
 };
 
 module.exports = StringActuator;

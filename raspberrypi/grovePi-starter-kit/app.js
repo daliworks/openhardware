@@ -9,7 +9,6 @@
 'use strict';
 var jsonrpc = require('jsonrpc-tcp'),
     _ = require('lodash'),
-    os = require('os'),
     log4js = require('log4js');
 
 var Lcd = require('./grovePiLcd'),

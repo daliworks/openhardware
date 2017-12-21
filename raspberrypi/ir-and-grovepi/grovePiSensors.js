@@ -31,7 +31,7 @@ var logger;
 log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30, cwd: 'log' });
 logger = log4js.getLogger('Sensor');
 
-function RotaryAngleAnalogSensor(pin) {
+function RotaryAngleAnalogSensor(/*pin*/) {
   this.preDegree = 0;
   AnalogSensor.apply(this, Array.prototype.slice.call(arguments));
   this.board.pinMode(this.pin, this.board.INPUT);
@@ -53,25 +53,25 @@ RotaryAngleAnalogSensor.prototype.read = function() {
   return degree;
 };
 
-function SoundAnalogSensor(pin) {
+function SoundAnalogSensor(/*pin*/) {
   AnalogSensor.apply(this, Array.prototype.slice.call(arguments));
   this.board.pinMode(this.pin, this.board.INPUT);
 }
 SoundAnalogSensor.prototype = new AnalogSensor();
 
-function VibrationAnalogSensor(pin) {
+function VibrationAnalogSensor(/*pin*/) {
   AnalogSensor.apply(this, Array.prototype.slice.call(arguments));
   this.board.pinMode(this.pin, this.board.INPUT);
 }
 VibrationAnalogSensor.prototype = new AnalogSensor();
 
-function OnOffDigitalSensor(pin) {
+function OnOffDigitalSensor(/*pin*/) {
   DigitalSensor.apply(this, Array.prototype.slice.call(arguments));
   this.board.pinMode(this.pin, this.board.OUTPUT);
 }
 OnOffDigitalSensor.prototype = new DigitalSensor();
 
-function ButtonDigitalSensor(pin) {
+function ButtonDigitalSensor(/*pin*/) {
   DigitalSensor.apply(this, Array.prototype.slice.call(arguments));
   this.board.pinMode(this.pin, this.board.INPUT);
 }

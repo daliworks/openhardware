@@ -1,5 +1,7 @@
 'use strict';
 
+// jshint camelcase:false
+
 var EventEmitter = require('events').EventEmitter,
     inherits = require('util').inherits,
     _ = require('lodash'),
@@ -9,6 +11,9 @@ var EventEmitter = require('events').EventEmitter,
 var enertalkURL = 'https://enertalk-auth.encoredtech.com/token';
 var enertalkClientId = '';
 var enertalkClientSecret = '';
+
+var reserveRefreshAccessToken;
+var refreshAccessToken;
 
 function postAccessToken(headers, form, cb) {
   function _errorHandling(err) {
@@ -26,11 +31,12 @@ function postAccessToken(headers, form, cb) {
       form: form
     },
     function parsingResponse(err, res) {
+      var body;
+
       if (err) {
         return _errorHandling(new Error('request result is error ' + err));
       }
 
-      var body;
       try {
         body = JSON.parse(res.body);
       } 
@@ -38,7 +44,7 @@ function postAccessToken(headers, form, cb) {
         return _errorHandling(new Error('JSON.parse failed. body:' + res.body));
       }
 
-      if (res.statusCode != 200) {
+      if (res.statusCode !== 200) {
         return _errorHandling(new Error('Invalid statusCode ' + res.statusCode +  ' ' + body.error));
       }
 
@@ -57,11 +63,16 @@ function postAccessToken(headers, form, cb) {
   );
 }
 
-function refreshAccessToken(cb) {
+reserveRefreshAccessToken = function (cb) {
+  setTimeout(function () {
+    refreshAccessToken(cb);
+  }, new Date(config.expirationDate) - new Date());
+};
+
+refreshAccessToken = function (cb) {
   if (!config.refreshToken) {
     console.log('[ERR] No refreshToken');
-    cb && cb(new Error('No refreshToken'));
-    return false;
+    return cb && cb(new Error('No refreshToken'));
   }
 
   var authorizationString = new Buffer(enertalkClientId + ':' + enertalkClientSecret).toString('base64');
@@ -71,7 +82,7 @@ function refreshAccessToken(cb) {
   };
 
   var form = {
-    'grant_type': "refresh_token",
+    'grant_type': 'refresh_token',
     'refresh_token': config.refreshToken
   };
 
@@ -85,16 +96,9 @@ function refreshAccessToken(cb) {
 
     return cb && cb(null, accessToken);
   });
-}
+};
 
-function reserveRefreshAccessToken(cb) {
-    setTimeout(function () {
-      refreshAccessToken(cb);
-    },
-    new Date(config.expirationDate) - new Date());
-}
-
-function oauth () {
+function Oauth() {
   var self = this;
 
   function _refreshAccessTokenCallback(err, accessToken) {
@@ -108,27 +112,25 @@ function oauth () {
   if (this.accessTokenExpired()) {
     console.log('[ERR] Access token is expired');
 
-    config.accessToken = "";
-    config.expirationDate = "";
+    config.accessToken = '';
+    config.expirationDate = '';
 
     if (config.refreshToken) {
       process.nextTick(function () {
         refreshAccessToken(_refreshAccessTokenCallback);
       });
     }
-  }
-  else {
-        reserveRefreshAccessToken(_refreshAccessTokenCallback);
+  } else {
+    reserveRefreshAccessToken(_refreshAccessTokenCallback);
   }
 }
 
-inherits(oauth, EventEmitter);
+inherits(Oauth, EventEmitter);
 
-oauth.prototype.requestAccessToken = function requestAccessToken(authorizationCode, cb) {
+Oauth.prototype.requestAccessToken = function requestAccessToken(authorizationCode, cb) {
   if (!authorizationCode) {
     console.log('[ERR] Invalid authorizationCode');
-    cb && cb(new Error('Invalid authorizationCode'));
-    return false;
+    return cb && cb(new Error('Invalid authorizationCode'));
   }
 
   var headers = {
@@ -151,23 +153,23 @@ oauth.prototype.requestAccessToken = function requestAccessToken(authorizationCo
    this.emit('receiveAccessToken', accessToken);
     return cb && cb(null, accessToken);
   }.bind(this));
-}
+};
 
-oauth.prototype.getAccessToken = function getAccessToken() {
+Oauth.prototype.getAccessToken = function getAccessToken() {
   if (this.accessTokenExpired()) {
     return null;
   }
 
   return config.accessToken;
-}
+};
 
-oauth.prototype.accessTokenExpired = function accessTokenExpired() {
+Oauth.prototype.accessTokenExpired = function accessTokenExpired() {
   //console.log(config.expirationDate);
   if (!config.expirationDate || (new Date() > config.expirationDate)) {
     return true;
   }
 
   return false;
-}
+};
 
-module.exports = new oauth();
+module.exports = new Oauth();

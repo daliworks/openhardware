@@ -1,3 +1,7 @@
+'use strict';
+
+// jshint bitwise:false
+
 var async = require('async'),
     I2c = require('i2c'),
     locks = require('locks');
@@ -8,9 +12,9 @@ var I2C_DEVICE_NODE = '/dev/i2c-1';
 
 var TH02_REG_STATUS = 0x00;
 var TH02_REG_DATA_H = 0x01;
-var TH02_REG_DATA_L = 0x02;
+//var TH02_REG_DATA_L = 0x02;
 var TH02_REG_CONFIG = 0x03;
-var TH02_REG_ID = 0x11;
+//var TH02_REG_ID = 0x11;
 var TH02_STATUS_RDY_MASK = 0x01;
 var TH02_CMD_MEASURE_HUMI = 0x01;
 var TH02_CMD_MEASURE_TEMP = 0x11;
@@ -24,7 +28,7 @@ var th02 = {
 
 function getStatusSync() {
   return 'on';
-};
+}
 
 function getTemperature(cb) {
 
@@ -77,14 +81,13 @@ function getTemperature(cb) {
       th02.mutex.unlock();
       if (err) {
         console.log('getTemperature err');
-        cb && cb(err);
-        return;
+        return cb && cb(err);
       }
 
-      cb && cb(null, temperature);
+      return cb && cb(null, temperature);
     }
   );
-};
+}
 
 function getHumidity(cb) {
   async.waterfall([
@@ -136,14 +139,13 @@ function getHumidity(cb) {
       th02.mutex.unlock();
       if (err) {
         console.log('getHumidity err');
-        cb && cb(err);
-        return;
+        return cb && cb(err);
       }
 
-      cb && cb(null, humidity);
+      return cb && cb(null, humidity);
     }
   );
-};
+}
 
 module.exports.getTemperature = getTemperature;
 module.exports.getHumidity = getHumidity;

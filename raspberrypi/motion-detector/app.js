@@ -1,7 +1,6 @@
 'use strict';
 
-var log4js = require('log4js'),
-    _ = require('lodash');
+var log4js = require('log4js');
 
 var Pir = require('./pir'),
     //Led = require('./led'),
@@ -33,6 +32,7 @@ logger = log4js.getLogger('DEVICEAGENT');
 
 
 function actuating(deviceAddress, name, cmd, options, cb) {
+  /*
   function _callback(err) {
     if (err) {
       logger.error(name + ' ' + cmd + ' actuating failed');
@@ -43,7 +43,6 @@ function actuating(deviceAddress, name, cmd, options, cb) {
     return cb && cb(null, options || 'ok');
   }
 
-  /*
   switch (cmd) {
   case 'on':
     return led.on(options.duration, _callback);
@@ -55,10 +54,12 @@ function actuating(deviceAddress, name, cmd, options, cb) {
     return cb && cb(new Error('This command is not support'));
   }
   */
+
+  return cb && cb(new Error('Actuators are not support'));
 }
 
 function sensing(deviceAddress, name, cb) {
-  if (deviceAddress != 0) {
+  if (deviceAddress !== 0) {
     logger.error('Invalid deviceAddress');
     return cb && cb(new Error('Invalid deviceAddress'));
   }
@@ -71,7 +72,7 @@ function sensing(deviceAddress, name, cb) {
 }
 
 function sensorStatus(deviceAddress, name, cb) {
-  cb && cb('on');
+  return cb && cb('on');
 }
 
 function deviceAgentInit() {
@@ -85,6 +86,6 @@ function deviceAgentInit() {
 
     tubeServer.sendValue(0, 'PIR', value);
   });
-};
+}
 
 deviceAgentInit();

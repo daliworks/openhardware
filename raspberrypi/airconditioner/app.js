@@ -1,7 +1,6 @@
 'use strict';
 
-var jsonrpc = require('jsonrpc-tcp'),
-    log4js = require('log4js'),
+var log4js = require('log4js'),
     _ = require('lodash');
 
 var airconditioner = require('./airconditioner');
@@ -22,6 +21,7 @@ var logger;
 log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30, cwd: 'log' });
 logger = log4js.getLogger('DA');
 
+// jshint latedef:nofunc
 function airconditionerActuating(cmd, options, cb) {
   function _callback(err) {
     if (err) {
@@ -44,10 +44,11 @@ function airconditionerActuating(cmd, options, cb) {
       return cb && cb(new Error('unknown cmd'));
   }
 }
+// jshint latedef:true
 
 function discover(cb) {
   logger.debug('request discover');
-  cb && cb(deviceAgent.sensors);
+  return cb && cb(deviceAgent.sensors);
 }
 
 function actuating(name, cmd, options, cb) {
@@ -81,7 +82,7 @@ function sensing(name, cb) {
 
 function sensorStatus(name, cb) {
   logger.debug('request %s status', name);
-  cb && cb('on');
+  return cb && cb('on');
 }
 
 deviceAgent.init = function () {

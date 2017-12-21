@@ -22,7 +22,7 @@ function irSend(params, cb) {
   var cmd = 'irsend SEND_ONCE LGE_6711A20015N ' + params;
 
   mutex.lock(function () {
-    exec(cmd, function (err, stdout, stderr) {
+    exec(cmd, function (err/*, stdout, stderr*/) {
       mutex.unlock();
       if (err) {
         return cb && cb(err);
@@ -51,12 +51,31 @@ function fanSpeedString() {
   }
 }
 
+function on(cb) {
+  airconditionStatus = 'ON';
+
+  targetTemperature = 18;
+  targetFanSpeed = 2;
+
+  var params = 'UN-JEON/JEONG-JI_' + 18;
+  irSend(params, cb);
+}
+
+function off(cb) {
+  airconditionStatus = 'OFF';
+
+  var param = 'UN-JEON/JEONG-JI_OFF';
+  targetTemperature = -1;
+  targetFanSpeed = -1;
+  irSend(param, cb);
+}
+
 function getTargetTemperature(cb) {
-  cb && cb(null, targetTemperature);
+  return cb && cb(null, targetTemperature);
 }
 
 function getTargetFanSpeed(cb) {
-  cb && cb(null, fanSpeedString(targetFanSpeed));
+  return cb && cb(null, fanSpeedString(targetFanSpeed));
 }
 
 function setTemperature(temperature, cb) {
@@ -126,25 +145,6 @@ function fanSpeedDown(cb) {
     console.log(params);
     irSend(params, cb);
   });
-}
-
-function on(cb) {
-  airconditionStatus = 'ON';
-
-  targetTemperature = 18;
-  targetFanSpeed = 2;
-
-  var params = 'UN-JEON/JEONG-JI_' + 18;
-  irSend(params, cb);
-}
-
-function off(cb) {
-  airconditionStatus = 'OFF';
-
-  var param = 'UN-JEON/JEONG-JI_OFF';
-  targetTemperature = -1;
-  targetFanSpeed = -1;
-  irSend(param, cb);
 }
 
 module.exports.on = on;

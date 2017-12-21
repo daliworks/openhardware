@@ -7,7 +7,7 @@ function dropboxImageDirectUrlParser(url, cb) {
     method: 'GET',
     uri: url,
     followRedirect: false
-  }, function (error, response, body) {
+  }, function (error/*, response, body*/) {
     if (error) {
       return cb && cb(error);
     }

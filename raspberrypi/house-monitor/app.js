@@ -1,19 +1,18 @@
 'use strict';
 
-var jsonrpc = require('jsonrpc-tcp'),
-    log4js = require('log4js'),
-    EventEmitter = require('events').EventEmitter,
+var log4js = require('log4js'),
+    //EventEmitter = require('events').EventEmitter,
     _ = require('lodash');
 
 var tubeServer = require('./tube_server'),
     th02 = require('./th02'),
     airconditioner = require('./airconditioner'),
-    enertalkOauth = require('./energymeter-oauth'),
-    enertalkEnergyMeter = require('./energymeter');
+    enertalkOauth = require('./energymeter-oauth');
+    //enertalkEnergyMeter = require('./energymeter');
 
 var deviceAgent = [{
   deviceAddress: 0,
-  deviceModelId: "jsonrpcFullV1.0",
+  deviceModelId: 'jsonrpcFullV1.0',
   sensors:[
     /* Enertalk Dependent
     {
@@ -57,6 +56,7 @@ var logger;
 log4js.configure(__dirname + '/logger_cfg.json', { reloadSecs: 30, cwd: 'log' });
 logger = log4js.getLogger('DeviceAgent');
 
+/*
 function enertalkGetPower(cb) {
 
   function _enertalkGerPower(accessToken) {
@@ -90,6 +90,7 @@ function enertalkGetPower(cb) {
     _enertalkGerPower(enertalkOauth.getAccessToken());
   }
 }
+*/
 
 function sensing(deviceAddress, name, cb) {
   logger.debug('request sensing(%s)', name);
@@ -153,10 +154,11 @@ function enertalkEnergyMeterOuathCodeUpdate(deviceAddress, name, cmd, options, c
 
   var oauthCode = options.text;
   if (!oauthCode) {
-    if (cb)
+    if (cb) {
       process.nextTick(function () {
         cb(new Error('No oauth code'));
       });
+    }
 
     return false;
   }

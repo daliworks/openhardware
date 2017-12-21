@@ -6,7 +6,7 @@ var async = require('async'),
 
 var dropboxUrlParser = require('./dropbox-driect-url');
 
-function Camera(pin) {
+function Camera(/*pin*/) {
   this.mutex = locks.createMutex();
 }
 
@@ -26,16 +26,16 @@ Camera.prototype.snapPicture = function (cb) {
         return done();
         });
     }, function (done) {
-      exec('raspistill -vf -hf -o ' + filenameLocaldir, function (err, stdout, stderr) {
+      exec('raspistill -vf -hf -o ' + filenameLocaldir, function (/*err, stdout, stderr*/) {
         return done();
       });
     }, function (done) {
-      exec('dropbox_uploader.sh upload ' + filenameLocaldir + ' /', function (err, stdout, stderr) {
+      exec('dropbox_uploader.sh upload ' + filenameLocaldir + ' /', function (/*err, stdout, stderr*/) {
         return done();
       });
     }, 
     function (done) {
-      exec('dropbox_uploader.sh share ' + filename, function (err, stdout, stderr) {
+      exec('dropbox_uploader.sh share ' + filename, function (err, stdout/*, stderr*/) {
         var urlPattern = new RegExp('https:\\/\\/.*', 'g');
         url = stdout.match(urlPattern);
 

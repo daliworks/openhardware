@@ -2,8 +2,7 @@
 
 var util = require('util'),
     events = require('events'),
-    _ = require('lodash'),
-    async = require('async');
+    _ = require('lodash');
 
 var Lcd = require('./lcdI2c');
 
@@ -65,8 +64,11 @@ GrovePiLcd.prototype.doingCommand = function (name, command, options) {
 
   if (command === 'print') {
     var text = [];
-    for (var i=0; i<LCD_NR_COLS; i++)
+    var i;
+
+    for (i = 0; i<LCD_NR_COLS; i++) {
       text[i] = ' ';
+    }
 
     var row = options.row || 0;
     var column = options.column || 0;
@@ -90,8 +92,8 @@ GrovePiLcd.prototype.doingCommand = function (name, command, options) {
   }
 };
 
-GrovePiLcd.prototype.getData = function (name) {
-  return {status: 'on'};
+GrovePiLcd.prototype.getData = function (/*name*/) {
+  return { status: 'on' };
 };
 
 GrovePiLcd.prototype.print = function (str, position) {
@@ -103,9 +105,9 @@ GrovePiLcd.prototype.print = function (str, position) {
 };
 
 GrovePiLcd.prototype.clear = function (cb, row) {
-  var self = this;
+  var i;
 
-  for (var i=0; i<LCD_NR_ROWS; i++) {
+  for (i = 0; i<LCD_NR_ROWS; i++) {
     this.text[i].scroll = false;
     this.text[i].str = null;
   }

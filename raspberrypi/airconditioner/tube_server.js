@@ -1,8 +1,6 @@
 'use strict';
 
 var jsonrpc = require('jsonrpc-tcp'),
-    util = require('util'),
-    events = require('events'),
     log4js = require('log4js'),
     _ = require('lodash');
 
@@ -20,7 +18,7 @@ function discover (tubeCallback) {
   logger.debug('discover');
 
   var devices = [];
-  devices[DEVICE_ID] = {deviceAddress: DEVICE_ID};
+  devices[DEVICE_ID] = { deviceAddress: DEVICE_ID, deviceModelId: 'jsonrpcFullV1.0' };
   devices[DEVICE_ID]['sensors'] = [];
 
   _.forEach(tubeServer.sensors, function (sensor) {
@@ -90,8 +88,9 @@ var sensor = {
   setNotification: function (sensorId, tubeCallback) {
     logger.info('setNotification');
 
-    if (tubeServer.eventSensorStatusMonitor)
+    if (tubeServer.eventSensorStatusMonitor) {
       return tubeCallback(null);
+    }
 
     tubeServer.eventSensorStatusMonitor = setInterval(function () {
       if (!tubeServer.client) {
@@ -142,8 +141,8 @@ tubeServer.init = function (sensorList, cbDiscover, cbSensing, cbActuating, cbSt
     tubeServer.client = client;
   }.bind(this));
 
-  server.on('clientError', function (err, conn) {
-    logger.error('clinetError');
+  server.on('clientError', function (err/*, conn*/) {
+    logger.error('clientError:', err);
 
     clearInterval(tubeServer.eventSensorStatusMonitor);
     tubeServer.eventSensorStatusMonitor = null;
@@ -155,7 +154,7 @@ tubeServer.init = function (sensorList, cbDiscover, cbSensing, cbActuating, cbSt
   server.listen(TUBE_PORT, function () {
     logger.info('listening port %d', TUBE_PORT);
   });
-}
+};
 
 tubeServer.sendValue = function (name, value) {
   if (!tubeServer.client) {
@@ -172,7 +171,7 @@ tubeServer.sendValue = function (name, value) {
   this.client.send({method: 'sensor.notification',
     params: [sensor.id, {value: value}] 
   });
-}
+};
 
 /////////////////////
 

@@ -71,12 +71,16 @@ var sensor = {
   },
 
   setNotification: function (sensorId, tubeCallback) {
+    var deviceAddress;
+    var sensorName;
+    var sensor;
+
     logger.info('setNotification %s', sensorId);
 
     if (tubeServer.eventSensorStatusMonitor) {
-      var deviceAddress = sensorId.split('-')[0];
-      var sensorName = sensorId.split('-')[1];
-      var sensor = sensorObjectGet(deviceAddress, sensorName);
+      deviceAddress = sensorId.split('-')[0];
+      sensorName = sensorId.split('-')[1];
+      sensor = sensorObjectGet(deviceAddress, sensorName);
       if (!sensor.notification) {
         logger.error('%s is not event sensor', sensorId);
         return tubeCallback(new Error('Not Event Sensor'));
@@ -86,13 +90,14 @@ var sensor = {
       return tubeCallback(null);
     }
 
-    var deviceAddress = sensorId.split('-')[0];
-    var sensorName = sensorId.split('-')[1];
-    var sensor = sensorObjectGet(deviceAddress, sensorName);
+    deviceAddress = sensorId.split('-')[0];
+    sensorName = sensorId.split('-')[1];
+    sensor = sensorObjectGet(deviceAddress, sensorName);
     if (!sensor.notification) {
       logger.error('%s is not event sensor', sensorId);
       return tubeCallback(new Error('Not Event Sensor'));
     }
+
     tubeServer.eventSensorStatusMonitorList = [];
     tubeServer.eventSensorStatusMonitorList.push(sensor);
 
@@ -116,7 +121,7 @@ var sensor = {
 
     return tubeCallback(null);
   }
-},
+};
 
 tubeServer.init = function (deviceList, cbSensing, cbActuating, cbStatus) {
   function _sensorIdInit(devices) {
@@ -147,8 +152,8 @@ tubeServer.init = function (deviceList, cbSensing, cbActuating, cbStatus) {
     tubeServer.client = client;
   }.bind(this));
 
-  server.on('clientError', function (err, conn) {
-    logger.error('clinetError');
+  server.on('clientError', function (err/*, conn*/) {
+    logger.error('clientError:', err);
 
     clearInterval(tubeServer.eventSensorStatusMonitor);
     tubeServer.eventSensorStatusMonitor = null;
@@ -160,7 +165,7 @@ tubeServer.init = function (deviceList, cbSensing, cbActuating, cbStatus) {
   server.listen(TUBE_PORT, function () {
     logger.info('listening port %d', TUBE_PORT);
   });
-}
+};
 
 tubeServer.sendValue = function (deviceAddress, name, value) {
   if (!tubeServer.client) {
@@ -177,7 +182,7 @@ tubeServer.sendValue = function (deviceAddress, name, value) {
   this.client.send({method: 'sensor.notification',
     params: [sensor.id, {value: value}] 
   });
-}
+};
 
 ////////////////////////////////////////////////////////////////////////////
 function deviceList() {

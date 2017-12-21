@@ -9,7 +9,6 @@
 'use strict';
 var jsonrpc = require('jsonrpc-tcp'),
     _ = require('lodash'),
-    os = require('os'),
     log4js = require('log4js');
 
 var Lcd = require('./grovePiLcd'),
@@ -163,6 +162,41 @@ function getSensorInfo(cond) {
   return found || {};
 }
 
+function airControllerActuator(deviceAddress, name, cmd, options, cb) {
+  function _callback(err) {
+    if (err) {
+      logger.error(name + ' ' + cmd + ' actuating failed');
+      logger.error(err);
+      return cb && cb(new Error('actuating failed'));
+    }
+
+    return cb && cb(null, options || 'ok');
+  }
+
+  switch (cmd) {
+    case 'on':
+      airconditioner.on(_callback);
+      break;
+    case 'off':
+      airconditioner.off(_callback);
+      break;
+    case 'tempUp':
+      airconditioner.temperatureUp(_callback);
+      break;
+    case 'tempDown':
+      airconditioner.temperatureDown(_callback);
+      break;
+    case 'fanSpeedUp':
+      airconditioner.fanSpeedUp(_callback);
+      break;
+    case 'fanSpeedDown':
+      airconditioner.fanSpeedDown(_callback);
+      break;
+    default:
+      return cb && cb(new Error('This command is not support'));
+  }
+}
+
 /**
  * JSON-RPC server setup 
  *
@@ -200,6 +234,7 @@ var Sensor = {
   get: function (id, result) {
     var target = getSensorInfo({id: id});
     var sensorData;
+    var dataObj = {};
 
     if (target.name === 'lcd') {
       sensorData = grovePiLcd.getData(target.name);
@@ -216,7 +251,13 @@ var Sensor = {
     else {
       sensorData = grovePiSensors.getData(target.name);
     }
-    return result(null, {value: sensorData && sensorData.value, status: (sensorData && sensorData.status) || 'err'});
+
+    dataObj = {
+      value: sensorData && sensorData.value,
+      status: (sensorData && sensorData.status) || 'err'
+    };
+
+    return result(null, dataObj);
   }
 };
 
@@ -245,41 +286,6 @@ server.expose('sensor', Sensor);
 server.listen(JSONRPC_PORT, function () {
   logger.info('listening port=%d', JSONRPC_PORT);
 });
-
-function airControllerActuator(deviceAddress, name, cmd, options, cb) {
-  function _callback(err) {
-    if (err) {
-      logger.error(name + ' ' + cmd + ' actuating failed');
-      logger.error(err);
-      return cb && cb(new Error('actuating failed'));
-    }
-
-    return cb && cb(null, options || 'ok');
-  }
-
-  switch (cmd) {
-    case 'on':
-      airconditioner.on(_callback);
-      break;
-    case 'off':
-      airconditioner.off(_callback);
-      break;
-    case 'tempUp':
-      airconditioner.temperatureUp(_callback);
-      break;
-    case 'tempDown':
-      airconditioner.temperatureDown(_callback);
-      break;
-    case 'fanSpeedUp':
-      airconditioner.fanSpeedUp(_callback);
-      break;
-    case 'fanSpeedDown':
-      airconditioner.fanSpeedDown(_callback);
-      break;
-    default:
-      return cb && cb(new Error('This command is not support'));
-  }
-}
 
 /*
  * GrovePi board setup

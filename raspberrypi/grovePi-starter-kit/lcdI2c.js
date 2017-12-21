@@ -4,7 +4,7 @@ var _ = require('lodash'),
     I2c = require('i2c'),
     util = require('util'),
     events = require('events'),
-    tick = global.setImmediate || process.nextTick,
+    //tick = global.setImmediate || process.nextTick,
     async = require('async');
 
 var BACKLIGHT_I2C_ADDR=0x62,
@@ -46,7 +46,7 @@ Lcd.prototype.setCursor = function (column, row) {
   }
 
   /* jshint bitwise: false */
-  this.lcdI2c.writeBytes(0x80, [0x80 | (column + 0x40 * row)], function (err) {});
+  this.lcdI2c.writeBytes(0x80, [0x80 | (column + 0x40 * row)], function (/*err*/) {});
   /* jshint bitwise: true */
 };
 
@@ -63,7 +63,7 @@ Lcd.prototype.print = function (val, cb) {
 
 Lcd.prototype.clear = function (cb) {
   this.clearing = 1;
-  this.lcdI2c.writeBytes(0x80, [0x01], function (err) {
+  this.lcdI2c.writeBytes(0x80, [0x01], function (/*err*/) {
     this.emit('clear');
     this.clearing = 0;
     return cb && cb();
@@ -79,36 +79,36 @@ Lcd.prototype.setBg = function (r, g, b) {
 
   async.series([
     function (done) {
-      self.blI2c.writeBytes(0x0, [0], function (err) {
+      self.blI2c.writeBytes(0x0, [0], function (/*err*/) {
         setTimeout(function () { done(); }, 5);
       });
     },
     function (done) {
-      self.blI2c.writeBytes(0x1, [0], function (err) {
+      self.blI2c.writeBytes(0x1, [0], function (/*err*/) {
         setTimeout(function () { done(); }, 5);
       });
     },
     function (done) {
-      self.blI2c.writeBytes(0x8, [0xaa], function (err) {
+      self.blI2c.writeBytes(0x8, [0xaa], function (/*err*/) {
         setTimeout(function () { done(); }, 5);
       });
     },
     function (done) {
-      self.blI2c.writeBytes(0x4, [r], function (err) {
+      self.blI2c.writeBytes(0x4, [r], function (/*err*/) {
         setTimeout(function () { done(); }, 5);
       });
     },
     function (done) {
-      self.blI2c.writeBytes(0x3, [g], function (err) {
+      self.blI2c.writeBytes(0x3, [g], function (/*err*/) {
         setTimeout(function () { done(); }, 5);
       });
     },
     function (done) {
-      self.blI2c.writeBytes(0x2, [b], function (err) {
+      self.blI2c.writeBytes(0x2, [b], function (/*err*/) {
         setTimeout(function () { done(); }, 5);
       });
     }],
-    function (err, result) {});
+    function (/*err, result*/) {});
 };
 
 Lcd.prototype._printChar = function (str, index, cb) {
@@ -123,7 +123,7 @@ Lcd.prototype._printChar = function (str, index, cb) {
     }
 
     try {
-      self.lcdI2c.writeBytes(0x40, [str.charCodeAt(index)], function (err) {
+      self.lcdI2c.writeBytes(0x40, [str.charCodeAt(index)], function (/*err*/) {
         self._printChar(str, index + 1, cb);
       } );
     } catch(e) {
@@ -140,31 +140,31 @@ Lcd.prototype._init = function () {
 
   async.series([
     function (done) {
-      self.lcdI2c.writeBytes(0x80, [0x3c], function (err) {
+      self.lcdI2c.writeBytes(0x80, [0x3c], function (/*err*/) {
         setTimeout(function () {
           return done();
         }, 1);
       });
     },
     function (done) {
-      self.lcdI2c.writeBytes(0x80, [0x0c], function (err) {
+      self.lcdI2c.writeBytes(0x80, [0x0c], function (/*err*/) {
         setTimeout(function () {
           return done();
         }, 1);
       });
     },
     function (done) {
-      self.lcdI2c.writeBytes(0x80, [0x01], function (err) {
+      self.lcdI2c.writeBytes(0x80, [0x01], function (/*err*/) {
         setTimeout(function () {
           return done();
         }, 2);
       });
     },
     function (done) {
-      self.lcdI2c.writeBytes(0x80, [0x06], function (err) {
+      self.lcdI2c.writeBytes(0x80, [0x06], function (/*err*/) {
         return done();
       });
-    }], function (err, result) {
+    }], function (err/*, result*/) {
       if (err) {
         console.log('lcd initialize failed err:', err);
       }

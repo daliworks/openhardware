@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * 0 <= alpha <= 1
  */
@@ -8,19 +10,19 @@ function Lpf(alpha) {
   }
 
   this.alpha = alpha;
-  this.prev_output = undefined;
+  this.prevOutput = undefined;
 }
 
 Lpf.prototype.filtering = function(input) {
-  if (!this.prev_output) {
-    this.prev_output = input;
+  if (!this.prevOutput) {
+    this.prevOutput = input;
     return input;
   }
 
-  var output = this.prev_output + this.alpha * (input - this.prev_output);
-  this.prev_output = output;
+  var output = this.prevOutput + this.alpha * (input - this.prevOutput);
+  this.prevOutput = output;
 
   return output;
-}
+};
 
 module.exports = Lpf;
